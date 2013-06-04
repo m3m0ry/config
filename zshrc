@@ -296,8 +296,68 @@ precmd_functions+=(prompt_precmd)
 
 
 
+#-----------------
+# Extract archive
+#-----------------
+# copied and modified for my needs from http://zshwiki.org/home/examples/functions
+# Author: Copyright © 2005 Eric P. Mangold - teratorn (-at-) gmail (-dot) com
+# License: MIT. http://www.opensource.org/licenses/mit-license.html 
+
+# this fucntion can extract any usuall archives
+
+extract_archive () {
+    local old_dirs current_dirs lower
+    lower=${(L)1}
+    old_dirs=( *(N/) )
+    if [[ $lower == *.tar.gz || $lower == *.tgz ]]; then
+        tar zxfv $1
+    elif [[ $lower == *.gz ]]; then
+        gunzip $1
+    elif [[ $lower == *.tar.bz2 || $lower == *.tbz ]]; then
+        bunzip2 -c $1 | tar xfv -
+    elif [[ $lower == *.bz2 ]]; then
+        bunzip2 $1
+    elif [[ $lower == *.zip ]]; then
+        unzip $1
+    elif [[ $lower == *.rar ]]; then
+        unrar e $1
+    elif [[ $lower == *.tar ]]; then
+        tar xfv $1
+    elif [[ $lower == *.lha ]]; then
+        lha e $1
+    else
+        print "Unknown archive type: $1"
+        return 1
+    fi
+}
+alias extract=extract_archive
+compdef '_files -g "*.gz *.tgz *.bz2 *.tbz *.zip *.rar *.tar *.lha"' extract_archive
 
 
+#-------
+# Umask
+#-------
+# For changing the umask automatically
+chpwd () {
+    case $PWD in
+        $HOME/*)
+            if [ $(umask) -ne 077 ] && [ $UID -ne 0 ]; then
+                umask 0077
+                echo -e "\033[01;32mumask: private \033[m"
+            fi;;
+        $HOME)
+            if [ $(umask) -ne 077 ] && [ $UID -ne 0 ]; then
+                umask 0077
+                echo -e "\033[01;32mumask: private \033[m"
+            fi;;
+        *)
+            if [[ $(umask) -ne 022 ]]; then
+                umask 0022
+                echo -e "\033[01;31mumask: world readable \033[m"
+            fi;;
+    esac
+}
+cd . &> /dev/null
 
 
 
