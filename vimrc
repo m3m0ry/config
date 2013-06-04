@@ -11,13 +11,38 @@ set modeline
 "add 7 extra lines when going up/down
 set scrolloff=7
 
+"automatically compile java, c or c++ code
+let fname = expand("%:r")
+function Compile()
+	let s:fe = expand("%:e")
+	let s:fn = expand("%:r")
+	let s:ff = expand("%")
+	if s:fe == "java"
+		execute '! javac ' . s:ff
+	else
+		if filereadable("Makefile")
+			execute '! make'
+		elseif s:fe == "c"
+			if filereadable(s:fn . '.h')
+				execute '! gcc -o ' . s:fn . ' ' . s:ff . ' ' . s:fn . '.h'
+			else
+				execute '! gcc -o ' . s:fn . ' ' . s:ff
+			endif
+		elseif s:fe == "cpp"
+			execute '! g++ ' . s:ff 
+		endif
+	endif
+endfunction
+imap <F12> <Esc>:w<F12>
+nnoremap <F12> :call Compile()<CR><CR>:echo fname . ' compiled'<CR>
 
 
-" ================
-" ===== Tabs =====
-" ================
 
-"tabs
+" =======================
+" ===== Indentation =====
+" =======================
+
+"default indentation settings
 set autoindent
 set smartindent
 set cindent
@@ -54,7 +79,11 @@ set ruler
 " =====================
 
 "case insensitive searching, except when using capitals
+set ignorecase
 set smartcase
+
+"highlight all search results
+set hlsearch
 
 
 
@@ -86,6 +115,26 @@ set autoread
 "alias :W :w
 cnoreabbrev <expr> W ((getcmdtype() is# ':' && getcmdline() is# 'W') ? ('w') : ('W'))
 
+":I toggles indentation (for copy/paste)
+let s:indentFlag = 1
+function s:toggleIndent()
+	if s:indentFlag == 1
+		set noautoindent nosmartindent
+		echo "Indentation off"
+	else
+		set autoindent smartindent
+		echo "Indentation on"
+	endif
+	let s:indentFlag = 1-s:indentFlag
+endfunction
+command I call s:toggleIndent() 
+
+
+
+" ===================
+" ===== Buffers =====
+" ===================
+
 "write and delete buffer, if only 1 buffer left, quit instead
 let s:bufcnt = bufnr('$')
 function Bufclose()
@@ -109,20 +158,6 @@ map = :Edit<Space>
 map - :call Bufclose()<CR>
 map [ :bp<CR>
 map ] :bn<CR>
-
-":I toggles indentation (for copy/paste)
-let s:indentFlag = 1
-function s:toggleIndent()
-	if s:indentFlag == 1
-		set noautoindent nosmartindent
-		echo "Indentation off"
-	else
-		set autoindent smartindent
-		echo "Indentation on"
-	endif
-	let s:indentFlag = 1-s:indentFlag
-endfunction
-command I call s:toggleIndent() 
 
 
 
