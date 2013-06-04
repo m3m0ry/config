@@ -243,8 +243,54 @@ bindkey -v
 
 
 
+#===========
+#=My Prompt=
+#===========
+# Thank's to Simon Ruderich (www.ruderich.org/simon) for teaching me
+# how to use zsh and giving me the idea of 2 line prompt
+# Use colorized output, necessary for prompts and completions.
+autoload -Uz colors && colors
+
+# Necessary for $EPOCHSECONDS, the UNIX time.
+zmodload zsh/datetime
+
+# Some shortcuts for colors. The %{...%} tells zsh that the data in between
+# doesn't need any space, necessary for correct prompt drawing.
+local red="%{${fg[red]}%}"
+local blue="%{${fg[blue]}%}"
+local green="%{${fg[green]}%}"
+local yellow="%{${fg[yellow]}%}"
+local default="%{${fg[default]}%}"
 
 
+prompt_precmd() {
+    # Setup. Create variables holding the formatted content.
+
+    # Current directory in yellow
+    local directory="${yellow}%~%#${default}"
+
+    # Current time (seconds since epoch) in Hex in bright blue.
+    local clock="${blue}[%T %D]${default}"
+
+    # User name (%n) in bright green.
+    local user="${green}%B%n%b${default}"
+    # Host name (%m) in bright green; underlined if running on a remote
+    # system through SSH.
+    local host="${green}%B%m%b${default}"
+    if [[ -n $SSH_CONNECTION ]]; then
+        host="%U${host}%u"
+    fi
+
+    # Number of background processes in yellow.
+    local background="%(1j.${yellow}(%j) ${default}.)"
+    # Exit code in bright red if not zero.
+    local exitcode="%(?..(${red}%B%?%b${default}%) )"
+
+
+    PROMPT="${clock}${red}-${default}${user}@${host} ${background}${exitcode}
+${directory} "
+}
+precmd_functions+=(prompt_precmd)
 
 
 
