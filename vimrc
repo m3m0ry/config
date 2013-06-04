@@ -2,10 +2,6 @@
 " ===== General =====
 " ===================
 
-"tabs
-set autoindent
-set smartindent
-
 ": history
 set history=200
 
@@ -13,7 +9,24 @@ set history=200
 set modeline
 
 "add 7 extra lines when going up/down
-set scrolloff=10
+set scrolloff=7
+
+
+
+" ================
+" ===== Tabs =====
+" ================
+
+"tabs
+set autoindent
+set smartindent
+set cindent
+
+"tabs are 4 whitespaces
+set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab
+
+"keep indentation on empty lines
+inoremap <CR> <CR>x<BS>
 
 
 
@@ -73,11 +86,6 @@ set autoread
 "alias :W :w
 cnoreabbrev <expr> W ((getcmdtype() is# ':' && getcmdline() is# 'W') ? ('w') : ('W'))
 
-"commands for fast switching between buffers
-map = :e<Space>
-map [ :bp<CR>
-map ] :bn<CR>
-
 "write and delete buffer, if only 1 buffer left, quit instead
 let s:bufcnt = bufnr('$')
 function Bufclose()
@@ -88,7 +96,33 @@ function Bufclose()
 		x
 	endif
 endfunction
+
+"open new buffer
+command! -complete=file -nargs=1 Edit call s:Bufopen(<f-args>)
+function s:Bufopen(myfile)
+	execute 'edit ' . a:myfile
+	let s:bufcnt = s:bufcnt+1
+endfunction
+
+"commands for fast switching between buffers
+map = :Edit<Space>
 map - :call Bufclose()<CR>
+map [ :bp<CR>
+map ] :bn<CR>
+
+":I toggles indentation (for copy/paste)
+let s:indentFlag = 1
+function s:toggleIndent()
+	if s:indentFlag == 1
+		set noautoindent nosmartindent
+		echo "Indentation off"
+	else
+		set autoindent smartindent
+		echo "Indentation on"
+	endif
+	let s:indentFlag = 1-s:indentFlag
+endfunction
+command I call s:toggleIndent() 
 
 
 
