@@ -33,8 +33,8 @@ function Compile()
 		endif
 	endif
 endfunction
-imap <F12> <Esc>:w<F12>
-nnoremap <F12> :call Compile()<CR><CR>:echo fname . ' compiled'<CR>
+imap <F12> <Esc><F12>
+nnoremap <F12> :w<CR>:call Compile()<CR>
 
 
 
