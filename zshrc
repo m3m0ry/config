@@ -1,13 +1,3 @@
-# Set up the prompt
-
-autoload -Uz promptinit
-promptinit
-prompt adam1
-
-# Use emacs keybindings even if our EDITOR is set to vi
-bindkey -e
-
-
 # Use modern completion system
 autoload -Uz compinit
 compinit
@@ -397,11 +387,11 @@ alias -g NUL="> /dev/null 2>&1"
 
 
 # fast directory change
-alias -g ...='cd ../..'
-alias -g ....='cd ../../..'
-alias -g .....='cd ../../../..'
-alias -g ......='cd ../../../../..'
-alias -g .......='cd ../../../../../..'
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
+alias -g .......='../../../../../..'
 
 
 # my aliases
