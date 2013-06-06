@@ -344,7 +344,7 @@ prompt_precmd() {
     local exitcode="%(?..(${red}%B%?%b${default}%) )"
 
 
-    PROMPT="${clock}${red}-${default}${user}@${host} ${background}${exitcode}
+    PROMPT="${clock}${red}-${default}${user}${red}@${default}${host} ${background}${exitcode}
 ${directory} "
 }
 precmd_functions+=(prompt_precmd)
