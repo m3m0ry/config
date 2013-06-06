@@ -145,6 +145,8 @@ setopt IGNORE_EOF
 # didn't really mean it. The wait and query can always be avoided by
 # expanding the '*' in ZLE (with tab). 
 setopt RM_STAR_WAIT
+#TODO: manpageds
+setopt SHORT_LOOPS
 
 
 #-------------
@@ -438,7 +440,7 @@ cd . &> /dev/null
 # Make sure aliases are expanded when using sudo.
 alias sudo='sudo '
 
-# Golobal
+# Global
 alias -g A='| awk'
 alias -g H='| head'
 alias -g T='| tail'
@@ -460,6 +462,15 @@ alias -g .....='../../../..'
 alias -g ......='../../../../..'
 alias -g .......='../../../../../..'
 
+# Suffix
+alias -s pdf="evince"
+alias -s c="vim"
+alias -s log="less"
+
+#search in history
+#usage: hs <word to be grepped>
+alias HG='fc -l 0|grep'
+
 
 # my aliases
 alias c=clear
@@ -468,6 +479,7 @@ alias l=ls
 alias v=vim
 alias grep='grep --color=auto'
 
+# ls configuration
 alias ls='ls --color=auto'
 alias la='ls -a'
 alias ll='ls -lah'
@@ -476,4 +488,6 @@ alias ll='ls -lah'
 
 
 
-
+autoload -U tetris
+zle -N tetris
+bindkey ^T tetris
