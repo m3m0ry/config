@@ -1,13 +1,3 @@
-# Set up the prompt
-
-autoload -Uz promptinit
-promptinit
-prompt adam1
-
-# Use emacs keybindings even if our EDITOR is set to vi
-bindkey -e
-
-
 # Use modern completion system
 autoload -Uz compinit
 compinit
@@ -231,6 +221,18 @@ setopt MULTIOS
 setopt ZLE
 # DON'T!!! Beep on error in ZLE. 
 setopt NO_BEEP
+
+
+
+
+
+
+#==============
+#=Key Bindings=
+#==============
+
+
+
 # I f ZLE is loaded, turning on this option has the equivalent effect of
 # 'bindkey -v'. In addition, the EMACS option is unset. Turning it off
 # has no effect. The option setting is not guaranteed to reflect the
@@ -238,6 +240,39 @@ setopt NO_BEEP
 # bindkey is the recommended interface. 
 #setopt VI
 bindkey -v
+# Use jj and jk to exit insert mode.
+bindkey 'jj' vi-cmd-mode
+bindkey 'jk' vi-cmd-mode
+
+bindkey '^P' vi-up-line-or-history 
+bindkey '^N' vi-down-line-or-history
+bindkey -a '^P' history-beginning-search-backward # binding for Vi-mode
+# Here only Vi-mode is necessary as ^P enters Vi-mode and ^N only makes sense
+# after calling ^P.
+bindkey -a '^N' history-beginning-search-forward
+
+
+bindkey "^[[1~" vi-beginning-of-line   # Home
+bindkey "^[[4~" vi-end-of-line         # End
+bindkey '^[[2~' beep                   # Insert
+bindkey '^[[3~' delete-char            # Del
+
+bindkey '^[[5~' vi-backward-blank-word # Page Up
+bindkey '^[[6~' vi-forward-blank-word  # Page Down
+
+
+bindkey -a u undo
+bindkey -a '^R' redo
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -251,8 +286,6 @@ bindkey -v
 # Use colorized output, necessary for prompts and completions.
 autoload -Uz colors && colors
 
-# Necessary for $EPOCHSECONDS, the UNIX time.
-zmodload zsh/datetime
 
 # Some shortcuts for colors. The %{...%} tells zsh that the data in between
 # doesn't need any space, necessary for correct prompt drawing.
@@ -261,6 +294,30 @@ local blue="%{${fg[blue]}%}"
 local green="%{${fg[green]}%}"
 local yellow="%{${fg[yellow]}%}"
 local default="%{${fg[default]}%}"
+
+
+
+# Copied from : http://zshwiki.org/home/zle/vi-mode to see
+# if i am in cmd mode or not
+# TODO: further testing
+precmd() {
+	  RPROMPT=""
+}
+zle-keymap-select() {
+	  RPROMPT=""
+	    [[ $KEYMAP = vicmd ]] && RPROMPT="${yellow}(CMD)${default}"
+	      () { return $__prompt_status }
+	        zle reset-prompt
+}
+zle-line-init() {
+	  typeset -g __prompt_status="$?"
+}
+zle -N zle-keymap-select
+zle -N zle-line-init
+
+
+
+
 
 
 prompt_precmd() {
@@ -397,11 +454,11 @@ alias -g NUL="> /dev/null 2>&1"
 
 
 # fast directory change
-alias -g ...='cd ../..'
-alias -g ....='cd ../../..'
-alias -g .....='cd ../../../..'
-alias -g ......='cd ../../../../..'
-alias -g .......='cd ../../../../../..'
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
+alias -g .......='../../../../../..'
 
 
 # my aliases
