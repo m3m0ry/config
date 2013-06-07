@@ -329,7 +329,7 @@ prompt_precmd() {
     local directory="${yellow}%~%#${default}"
 
     # Current time (seconds since epoch) in Hex in bright blue.
-    local clock="${blue}[%T %D]${default}"
+    local clock="${blue}[${green}%T %D${blue}]${default}"
 
     # User name (%n) in bright green.
     local user="${green}%B%n%b${default}"
