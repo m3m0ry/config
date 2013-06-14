@@ -2,9 +2,10 @@
 " ===== General =====
 " ===================
 
-"tabs
-set autoindent
-set smartindent
+"improved by simon
+set nocompatible
+
+filetype plugin indent on
 
 ": history
 set history=200
@@ -12,7 +13,7 @@ set history=200
 "modeline (tabwidth, etc)
 set modeline
 
-"add 7 extra lines when going up/down
+"add x extra lines when going up/down
 set scrolloff=10
 
 
@@ -21,11 +22,12 @@ set scrolloff=10
 " ===== Look&Feel =====
 " =====================
 
+"improved by simon
 "display line numbers
 set number
 
 "display buffer name
-set ls=2
+set laststatus=2
 
 "color code
 syntax on
@@ -50,13 +52,12 @@ set smartcase
 " =================
 
 "don't backup anything
-set nobackup
-set nowb
-set noswapfile
+"set nobackup
 
+"improved by simon
 "keep undo history stored
 if isdirectory($HOME . '/.vim/backup') == 0
-	silent !mkdir -p ~/.vim/backups >/dev/null 2>&1
+	call mkdir($HOME . '/.vim/backup', 'p')
 endif
 set undodir=~/.vim/backups
 set undofile
@@ -73,17 +74,19 @@ set autoread
 "alias :W :w
 cnoreabbrev <expr> W ((getcmdtype() is# ':' && getcmdline() is# 'W') ? ('w') : ('W'))
 
+"not recomended by simon(= [ ] are important omvementes)
 "commands for fast switching between buffers
 map = :e<Space>
 map [ :bp<CR>
 map ] :bn<CR>
 
 "write and delete buffer, if only 1 buffer left, quit instead
-let s:bufcnt = bufnr('$')
 function Bufclose()
-	if s:bufcnt > 1
+	"  FIXME: wrong, bufnr('$') is not number of buffers, only number of
+	"  newest buffer
+	let l:bufcnt = bufnr('$')
+	if l:bufcnt > 1
 		w | bd
-		let s:bufcnt = s:bufcnt-1
 	else
 		x
 	endif
