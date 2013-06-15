@@ -35,6 +35,7 @@ function Compile()
 endfunction
 imap <F12> <Esc><F12>
 nnoremap <F12> :w<CR>:call Compile()<CR>
+command Compile call Compile()
 
 
 
@@ -43,9 +44,7 @@ nnoremap <F12> :w<CR>:call Compile()<CR>
 " =======================
 
 "default indentation settings
-set autoindent
-set smartindent
-set cindent
+filetype plugin indent on
 
 "tabs are 4 whitespaces
 set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab
@@ -139,10 +138,10 @@ command I call s:toggleIndent()
 let s:bufcnt = bufnr('$')
 function Bufclose()
 	if s:bufcnt > 1
-		w | bd
+		bd
 		let s:bufcnt = s:bufcnt-1
 	else
-		x
+		q
 	endif
 endfunction
 
@@ -154,10 +153,10 @@ function s:Bufopen(myfile)
 endfunction
 
 "commands for fast switching between buffers
-map = :Edit<Space>
-map - :call Bufclose()<CR>
-map [ :bp<CR>
-map ] :bn<CR>
+map = :w<CR>:Edit<Space>
+map - :w<CR>:call Bufclose()<CR>
+map [ :w<CR>:bp<CR>
+map ] :w<CR>:bn<CR>
 
 
 
