@@ -1,20 +1,38 @@
+set nocompatible
+set showcmd
 " ===================
 " ===== General =====
 " ===================
 
-"improved by simon
-set nocompatible
-
-filetype plugin indent on
-
 ": history
-set history=200
+set history=1000
 
 "modeline (tabwidth, etc)
 set modeline
 
-"add x extra lines when going up/down
-set scrolloff=10
+
+set lbr
+set tw=80
+
+"add 7 extra lines when going up/down
+set scrolloff=7
+
+
+" =======================
+" ===== Indentation =====
+" =======================
+
+"default indentation settings
+filetype plugin on
+filetype indent on
+
+"tabs are 4 whitespaces
+set tabstop=4 softtabstop=4 shiftwidth=4 expandtab
+set smarttab
+
+
+"keep indentation on empty lines
+inoremap <CR> <CR>x<BS>
 
 
 
@@ -22,15 +40,16 @@ set scrolloff=10
 " ===== Look&Feel =====
 " =====================
 
-"improved by simon
 "display line numbers
 set number
 
 "display buffer name
-set laststatus=2
+set ls=2
+
+set encoding=utf8
 
 "color code
-syntax on
+syntax enable
 colorscheme desert
 
 "display cursor position
@@ -43,7 +62,11 @@ set ruler
 " =====================
 
 "case insensitive searching, except when using capitals
+set ignorecase
 set smartcase
+
+"highlight all search results
+set hlsearch
 
 
 
@@ -52,12 +75,13 @@ set smartcase
 " =================
 
 "don't backup anything
-"set nobackup
+"set backup
+"set wb
+"set swapfile
 
-"improved by simon
 "keep undo history stored
 if isdirectory($HOME . '/.vim/backup') == 0
-	call mkdir($HOME . '/.vim/backup', 'p')
+silent !mkdir -p ~/.vim/backups >/dev/null 2>&1
 endif
 set undodir=~/.vim/backups
 set undofile
@@ -71,33 +95,45 @@ set autoread
 " ===== Commands =====
 " ====================
 
-"alias :W :w
-cnoreabbrev <expr> W ((getcmdtype() is# ':' && getcmdline() is# 'W') ? ('w') : ('W'))
+":I toggles indentation (for copy/paste)
+let s:indentFlag = 1
+function s:toggleIndent()
+	if s:indentFlag == 1
+		set noautoindent nosmartindent
+		echo "Indentation off"
+	else
+		set autoindent smartindent
+		echo "Indentation on"
+	endif
+	let s:indentFlag = 1-s:indentFlag
+endfunction
+command c-i call s:toggleIndent()
 
-"not recomended by simon(= [ ] are important omvementes)
-"commands for fast switching between buffers
-map = :e<Space>
-map [ :bp<CR>
-map ] :bn<CR>
+
+
+" ===================
+" ===== Buffers =====
+" ===================
 
 "write and delete buffer, if only 1 buffer left, quit instead
+let s:bufcnt = bufnr('$')
 function Bufclose()
-	"  FIXME: wrong, bufnr('$') is not number of buffers, only number of
-	"  newest buffer
-	let l:bufcnt = bufnr('$')
-	if l:bufcnt > 1
-		w | bd
-	else
-		x
-	endif
+if s:bufcnt > 1
+bd
+let s:bufcnt = s:bufcnt-1
+else
+q
+endif
 endfunction
-map - :call Bufclose()<CR>
 
 
 
 " ======================
 " ===== Completion =====
 " ======================
+
+"Turn on the Wild menu
+set wildmenu
 
 "no compiled java files
 set wildignore=*.class,*.jar
@@ -107,3 +143,8 @@ set wildignore+=*.o,a.out
 
 "no backup or switch files
 set wildignore+=*~,*.swp
+
+set wildignore*=*.pyc
+
+" Regular expressions
+set magic
