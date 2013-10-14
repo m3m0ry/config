@@ -95,10 +95,6 @@ set pastetoggle=<F2>
 
 "aliases
 cnoreabbrev <expr> W ((getcmdtype() is# ':' && getcmdline() is# 'W') ? ('w') : ('W'))
-set wildmenu
-set wildmenu
-set wildmenu
-set wildmenu
 
 
 "enable mouse
