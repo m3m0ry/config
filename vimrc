@@ -95,6 +95,7 @@ set pastetoggle=<F2>
 
 "aliases
 cnoreabbrev <expr> W ((getcmdtype() is# ':' && getcmdline() is# 'W') ? ('w') : ('W'))
+nnoremap <C-d> :q<CR>
 
 
 "enable mouse
