@@ -46,7 +46,7 @@ set lazyredraw
 
 
 "syntax highlighting'n stuff
-filetype plugin indent on
+"filetype plugin indent on
 syntax on
 colorscheme metacosm
 
