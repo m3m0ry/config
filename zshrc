@@ -141,14 +141,6 @@ setopt NO_CLOBBER
 # The shell variable CORRECT_IGNORE may be set to a pattern to match
 # words that will never be offered as corrections. 
 setopt correct
-# Do not exit on end-of-file. Require the use of exit or logout instead.
-# However, ten consecutive EOFs will cause the shell to exit anyway, to
-# avoid the shell hanging if its tty goes away. 
-# Also, if this option is set and the Zsh Line Editor is used, widgets
-# implemented by shell functions can be bound to EOF
-# (normally Control-D) without printing the normal warning message.
-# This works only for normal widgets, not for completion widgets. 
-setopt IGNORE_EOF
 # If querying the user before executing 'rm *' or 'rm path/*', first
 # wait ten seconds and ignore anything typed in that time. This avoids
 # the problem of reflexively answering 'yes' to the query when one
@@ -374,6 +366,7 @@ cd . &> /dev/null
 
 
 
+
 #---------
 # Aliases
 #---------
@@ -408,7 +401,8 @@ alias -g .......='cd ../../../../../..'
 alias c=clear
 alias g=git
 alias l=ls
-alias v=vim
+alias v='vim -p'
+alias vim='vim -p'
 alias grep='grep --color=auto'
 
 alias ls='ls --color=auto'
@@ -416,7 +410,8 @@ alias la='ls -a'
 alias ll='ls -lah'
 
 
-
-
-
-
+if [ -f ~/.zshalias ]; then
+    source ~/.zshalias
+else
+    print "file not found: ~/.zshalias"
+fi
