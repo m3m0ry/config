@@ -46,9 +46,9 @@ set lazyredraw
 
 
 "syntax highlighting'n stuff
-"filetype plugin indent on
+filetype plugin indent on
+colorscheme Tomorrow-Night-Blue
 syntax on
-colorscheme metacosm
 
 
 "statusline
