@@ -41,7 +41,7 @@ set noswapfile
 
 "misc
 set autoread
-set autochdir
+set noautochdir
 set lazyredraw
 
 
