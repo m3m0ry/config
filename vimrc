@@ -72,6 +72,7 @@ nnoremap i :let @/ = ""<CR>i
 set ruler
 set number
 set showcmd
+set scrolloff=7
 
 
 "indentation
