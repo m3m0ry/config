@@ -1,150 +1,104 @@
+" don't behave compatible to the old vi
 set nocompatible
+
+" restore cursor position to where it was before
+augroup JumpCursorOnEdit
+   au!
+   autocmd BufReadPost *
+            \ if expand("<afile>:p:h") !=? $TEMP |
+            \   if line("'\"") > 1 && line("'\"") <= line("$") |
+            \     let JumpCursorOnEdit_foo = line("'\"") |
+            \     let b:doopenfold = 1 |
+            \     if (foldlevel(JumpCursorOnEdit_foo) > foldlevel(JumpCursorOnEdit_foo - 1)) |
+            \        let JumpCursorOnEdit_foo = JumpCursorOnEdit_foo - 1 |
+            \        let b:doopenfold = 2 |
+            \     endif |
+            \     exe JumpCursorOnEdit_foo |
+            \   endif |
+            \ endif
+   " need to postpone using "zv" until after reading the modelines.
+   autocmd BufWinEnter *
+            \ if exists("b:doopenfold") |
+            \   exe "normal zv" |
+            \   if(b:doopenfold > 1) |
+            \       exe  "+".1 |
+            \   endif |
+            \   unlet b:doopenfold |
+            \ endif
+augroup END
+
+
+
+
+
+
+"no backup files but a large history
+set history=500
+set nobackup
+set nowb
+set noswapfile
+
+
+"misc
+set autoread
+set noautochdir
+set lazyredraw
+
+
+"syntax highlighting'n stuff
+filetype plugin indent on
+colorscheme Tomorrow-Night-Blue
+syntax on
+
+
+"statusline
+set laststatus=2
+set statusline=%F%m%r%h%w\ [%l,%v][%p%%]
+set wildmenu
+set wildmode=list:longest,full
+set completeopt=menuone,preview
+set confirm
+
+
+"completion and searching
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+nnoremap i :let @/ = ""<CR>i
+
+
+"visual goodies
+set ruler
+set number
 set showcmd
-" ===================
-" ===== General =====
-" ===================
-
-": history
-set history=1000
-
-"modeline (tabwidth, etc)
-set modeline
-
-
-set lbr
-set tw=80
-
-"add 7 extra lines when going up/down
 set scrolloff=7
 
 
-" =======================
-" ===== Indentation =====
-" =======================
-
-"default indentation settings
-filetype plugin on
-filetype indent on
-
-"tabs are 4 whitespaces
-set tabstop=4 softtabstop=4 shiftwidth=4 expandtab
-set smarttab
+"indentation
+set autoindent
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set noexpandtab
 
 
-"keep indentation on empty lines
-inoremap <CR> <CR>x<BS>
+"tabs
+nnoremap <silent> <C-t> :tabnew<CR>
+nnoremap <silent> <C-Left> :tabprevious<CR>
+nnoremap <silent> <C-Right> :tabnext<CR>
+nnoremap = :tabedit 
 
 
-
-" =====================
-" ===== Look&Feel =====
-" =====================
-
-"display line numbers
-set number
-
-"display buffer name
-set ls=2
-
-set encoding=utf8
-
-"color code
-syntax enable
-colorscheme desert
-
-"display cursor position
-set ruler
+"other key mappings
+inoremap jj <Esc>
+set pastetoggle=<F2>
 
 
-
-" =====================
-" ===== Searching =====
-" =====================
-
-"case insensitive searching, except when using capitals
-set ignorecase
-set smartcase
-
-"highlight all search results
-set hlsearch
+"aliases
+cnoreabbrev <expr> W ((getcmdtype() is# ':' && getcmdline() is# 'W') ? ('w') : ('W'))
+nnoremap <C-d> :q<CR>
 
 
-
-" =================
-" ===== Files =====
-" =================
-
-"don't backup anything
-"set backup
-"set wb
-"set swapfile
-
-"keep undo history stored
-if isdirectory($HOME . '/.vim/backup') == 0
-silent !mkdir -p ~/.vim/backups >/dev/null 2>&1
-endif
-set undodir=~/.vim/backups
-set undofile
-
-"reload file if changed from the outside
-set autoread
-
-
-
-" ====================
-" ===== Commands =====
-" ====================
-
-":I toggles indentation (for copy/paste)
-let s:indentFlag = 1
-function s:toggleIndent()
-	if s:indentFlag == 1
-		set noautoindent nosmartindent
-		echo "Indentation off"
-	else
-		set autoindent smartindent
-		echo "Indentation on"
-	endif
-	let s:indentFlag = 1-s:indentFlag
-endfunction
-command c-i call s:toggleIndent()
-
-
-
-" ===================
-" ===== Buffers =====
-" ===================
-
-"write and delete buffer, if only 1 buffer left, quit instead
-let s:bufcnt = bufnr('$')
-function Bufclose()
-if s:bufcnt > 1
-bd
-let s:bufcnt = s:bufcnt-1
-else
-q
-endif
-endfunction
-
-
-
-" ======================
-" ===== Completion =====
-" ======================
-
-"Turn on the Wild menu
-set wildmenu
-
-"no compiled java files
-set wildignore=*.class,*.jar
-
-"no compiled c files
-set wildignore+=*.o,a.out
-
-"no backup or switch files
-set wildignore+=*~,*.swp
-
-set wildignore*=*.pyc
-
-" Regular expressions
-set magic
+"enable mouse
+set mouse=a
