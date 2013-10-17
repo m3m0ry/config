@@ -476,7 +476,8 @@ alias HG='fc -l 0|grep'
 alias c=clear
 alias g=git
 alias l=ls
-alias v=vim
+alias v='vim -p'
+alias vim='vim -p'
 alias grep='grep --color=auto'
 
 # ls configuration
@@ -484,6 +485,12 @@ alias ls='ls --color=auto'
 alias la='ls -a'
 alias ll='ls -lah'
 
+# load extern alias file
+if [ -f ~/.zshalias ]; then
+    source ~/.zshalias
+else
+    print "file not found: ~/.zshalias"
+fi
 
 
 
