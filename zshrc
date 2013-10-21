@@ -1,5 +1,5 @@
 # Use modern completion system
-autoload -Uz compinit
+autoload -U compinit
 compinit
 
 #after double-TAB you can sellect with arrowkeys from a menu
@@ -96,7 +96,7 @@ setopt PUSHD_TO_HOME
 # Keep 5000 lines of history within the shell and save it to ~/.zsh_history:
 export HISTSIZE=50000
 export SAVEHIST=50000
-export HISTFILE=~/.zsh_history
+export HISTFILE=~/.zsh/.zsh_history
 # If this is set, zsh sessions will append their history list to the
 # history file, rather than replace it. Thus, multiple parallel zsh
 # sessions will all have the new entries from their history lists added
@@ -420,17 +420,6 @@ cd . &> /dev/null
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 #---------
 # Aliases
 #---------
@@ -485,7 +474,3 @@ alias ll='ls -lah'
 
 
 
-
-autoload -U tetris
-zle -N tetris
-bindkey ^T tetris
