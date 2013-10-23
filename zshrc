@@ -463,7 +463,8 @@ alias HG='fc -l 0|grep'
 alias c=clear
 alias g=git
 alias l=ls
-alias v=vim
+alias v='vim -p'
+alias vim='vim -p'
 alias grep='grep --color=auto'
 
 # ls configuration
