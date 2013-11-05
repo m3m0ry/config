@@ -1,16 +1,12 @@
 #------------
 #Import Files
 #------------
-aliases=".zsh/aliases"
+my_aliases=".zsh/aliases"
 
 
 
 
-
-
-
-
-
+#TODO: complete the completion and move it to the right place in zshrc
 # Use modern completion system
 autoload -U compinit
 compinit
@@ -433,10 +429,10 @@ loading=`pwd`
 cd ~
 
 #---Aliases---
-if [ -f "$aliases" ]; then
-	source "$aliases"
+if [ -f "$my_aliases" ]; then
+	source "$my_aliases"
 else
-   echo "File $aliases does not exist."
+   echo "File $my_aliases does not exist."
 fi
 
 
