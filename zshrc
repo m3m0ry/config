@@ -420,6 +420,73 @@ cd . &> /dev/null
 
 
 
+# If ^C is pressed while typing a command, add it to the history so it can be
+# easily retrieved later and then abort like ^C normally does. This is useful
+# when I want to abort an command to do something in between and then finish
+# typing the command.
+#
+# Thanks to Vadim Zeitlin <vz-zsh@zeitlins.org> for a fix (--) so lines
+# starting with - don't cause errors; and to Nadav Har'El
+# <nyh@math.technion.ac.il> for a fix (-r) to handle whitespace/quotes
+# correctly, both on the Zsh mailing list.
+TRAPINT() {
+    # Don't store this line in history if histignorespace is enabled and the
+    # line starts with a space.
+    if [[ -o histignorespace && ${BUFFER[1]} = " " ]]; then
+        return $1
+    fi
+
+    # Store the current buffer in the history.
+    zle && print -s -r -- $BUFFER
+
+    # Return the default exit code so Zsh aborts the current command.
+    return $1
+}
+
+
+
+
+use_multiplexer=screen
+
+# If not already in screen or tmux, reattach to a running session or create a
+# new one. This also starts screen/tmux on a remote server when connecting
+# through ssh.
+if [[ $TERM != dumb && $TERM != linux && -z $STY && -z $TMUX ]]; then
+    # Get running detached sessions.
+    if [[ $use_multiplexer = screen ]]; then
+        session=$(screen -list | grep 'Detached' | awk '{ print $1; exit }')
+    elif [[ $use_multiplexer = tmux ]]; then
+        session=$(tmux list-sessions 2>/dev/null \
+                  | sed '/(attached)$/ d; s/^\([0-9]\{1,\}\).*$/\1/; q')
+    fi
+
+    # As we exec later we have to set the title here.
+    if [[ $use_multiplexer = screen ]]; then
+        window_preexec "screen"
+    elif [[ $use_multiplexer = tmux ]]; then
+        window_preexec "tmux"
+    fi
+
+    # Create a new session if none is running.
+    if [[ -z $session ]]; then
+        if [[ $use_multiplexer = screen ]]; then
+            exec screen
+        elif [[ $use_multiplexer = tmux ]]; then
+            exec tmux
+        fi
+    # Reattach to a running session.
+    else
+        if [[ $use_multiplexer = screen ]]; then
+            exec screen -r $session
+        elif [[ $use_multiplexer = tmux ]]; then
+            exec tmux attach-session -t $session
+        fi
+    fi
+fi
+
+
+
+
 
 #---------
 # Imports
