@@ -1,24 +1,45 @@
+#------------
+#Import Files
+#------------
+my_aliases=".zsh/aliases"
+
+
+
+
+#TODO: complete the completion and move it to the right place in zshrc
 # Use modern completion system
-autoload -Uz compinit
+autoload -U compinit
 compinit
 
-zstyle ':completion:*' auto-description 'specify: %d'
-zstyle ':completion:*' completer _expand _complete _correct _approximate
-zstyle ':completion:*' format 'Completing %d'
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*' menu select=2
-eval "$(dircolors -b)"
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*' list-colors ''
-zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
-zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
-zstyle ':completion:*' menu select=long
-zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
-zstyle ':completion:*' use-compctl false
-zstyle ':completion:*' verbose true
+#after double-TAB you can sellect with arrowkeys from a menu
+zstyle ':completion:*' menu select
 
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+#copmlete your aliases too
+setopt completealiases
+
+# hosts completion for a few commands
+compctl -k hosts ftp lftp ncftp ssh w3m lynx links elinks nc telnet rlogin host
+compctl -k hosts -P '@' finger
+
+
+
+#zstyle ':completion:*' auto-description 'specify: %d'
+#zstyle ':completion:*' completer _expand _complete _correct _approximate
+#zstyle ':completion:*' format 'Completing %d'
+#zstyle ':completion:*' group-name ''
+#zstyle ':completion:*' menu select=2
+#eval "$(dircolors -b)"
+#zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+#zstyle ':completion:*' list-colors ''
+#zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+#zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
+#zstyle ':completion:*' menu select=long
+#zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+#zstyle ':completion:*' use-compctl false
+#zstyle ':completion:*' verbose true
+#
+#zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+#zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 
 #=========
@@ -83,8 +104,8 @@ setopt PUSHD_TO_HOME
 
 # Keep 5000 lines of history within the shell and save it to ~/.zsh_history:
 export HISTSIZE=50000
-export SAVEHIST=500
-export HISTFILE=~/.zsh_history
+export SAVEHIST=50000
+export HISTFILE=~/.zsh/zsh_history
 # If this is set, zsh sessions will append their history list to the
 # history file, rather than replace it. Thus, multiple parallel zsh
 # sessions will all have the new entries from their history lists added
@@ -261,17 +282,6 @@ bindkey -a '^R' redo
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 #===========
 #=My Prompt=
 #===========
@@ -293,24 +303,13 @@ local default="%{${fg[default]}%}"
 
 # Copied from : http://zshwiki.org/home/zle/vi-mode to see
 # if i am in cmd mode or not
-# TODO: further testing
-precmd() {
-	  RPROMPT=""
+function zle-line-init zle-keymap-select {
+    RPS1="${${KEYMAP/vicmd/-- NORMAL --}/(main|viins)/-- INSERT --}"
+    RPS2=$RPS1
+    zle reset-prompt
 }
-zle-keymap-select() {
-	  RPROMPT=""
-	    [[ $KEYMAP = vicmd ]] && RPROMPT="${yellow}(CMD)${default}"
-	      () { return $__prompt_status }
-	        zle reset-prompt
-}
-zle-line-init() {
-	  typeset -g __prompt_status="$?"
-}
-zle -N zle-keymap-select
 zle -N zle-line-init
-
-
-
+zle -N zle-keymap-select
 
 
 
@@ -413,80 +412,88 @@ cd . &> /dev/null
 
 
 
+# If ^C is pressed while typing a command, add it to the history so it can be
+# easily retrieved later and then abort like ^C normally does. This is useful
+# when I want to abort an command to do something in between and then finish
+# typing the command.
+#
+# Thanks to Vadim Zeitlin <vz-zsh@zeitlins.org> for a fix (--) so lines
+# starting with - don't cause errors; and to Nadav Har'El
+# <nyh@math.technion.ac.il> for a fix (-r) to handle whitespace/quotes
+# correctly, both on the Zsh mailing list.
+TRAPINT() {
+    # Don't store this line in history if histignorespace is enabled and the
+    # line starts with a space.
+    if [[ -o histignorespace && ${BUFFER[1]} = " " ]]; then
+        return $1
+    fi
+
+    # Store the current buffer in the history.
+    zle && print -s -r -- $BUFFER
+
+    # Return the default exit code so Zsh aborts the current command.
+    return $1
+}
 
 
 
 
+use_multiplexer=screen
 
+# If not already in screen or tmux, reattach to a running session or create a
+# new one. This also starts screen/tmux on a remote server when connecting
+# through ssh.
+if [[ $TERM != dumb && $TERM != linux && -z $STY && -z $TMUX ]]; then
+    # Get running detached sessions.
+    if [[ $use_multiplexer = screen ]]; then
+        session=$(screen -list | grep 'Detached' | awk '{ print $1; exit }')
+    elif [[ $use_multiplexer = tmux ]]; then
+        session=$(tmux list-sessions 2>/dev/null \
+                  | sed '/(attached)$/ d; s/^\([0-9]\{1,\}\).*$/\1/; q')
+    fi
 
+    # As we exec later we have to set the title here.
+    if [[ $use_multiplexer = screen ]]; then
+        window_preexec "screen"
+    elif [[ $use_multiplexer = tmux ]]; then
+        window_preexec "tmux"
+    fi
 
-
-
-
-
-
-#---------
-# Aliases
-#---------
-
-# Make sure aliases are expanded when using sudo.
-alias sudo='sudo '
-
-# Global
-alias -g A='| awk'
-alias -g H='| head'
-alias -g T='| tail'
-alias -g G='| grep'
-alias -g L="| less"
-alias -g M="| most"
-alias -g B="&|"
-alias -g HL="--help"
-alias -g LE="2>&1 | less"
-alias -g CE="2>&1 | cat -A"
-alias -g NE="2> /dev/null"
-alias -g NUL="> /dev/null 2>&1"
-
-
-# fast directory change
-alias -g ...='../..'
-alias -g ....='../../..'
-alias -g .....='../../../..'
-alias -g ......='../../../../..'
-alias -g .......='../../../../../..'
-
-# Suffix
-alias -s pdf="evince"
-alias -s c="vim"
-alias -s log="less"
-
-#search in history
-#usage: hs <word to be grepped>
-alias HG='fc -l 0|grep'
-
-
-# my aliases
-alias c=clear
-alias g=git
-alias l=ls
-alias v='vim -p'
-alias vim='vim -p'
-alias grep='grep --color=auto'
-
-# ls configuration
-alias ls='ls --color=auto'
-alias la='ls -a'
-alias ll='ls -lah'
-
-# load extern alias file
-if [ -f ~/.zshalias ]; then
-    source ~/.zshalias
-else
-    print "file not found: ~/.zshalias"
+    # Create a new session if none is running.
+    if [[ -z $session ]]; then
+        if [[ $use_multiplexer = screen ]]; then
+            exec screen
+        elif [[ $use_multiplexer = tmux ]]; then
+            exec tmux
+        fi
+    # Reattach to a running session.
+    else
+        if [[ $use_multiplexer = screen ]]; then
+            exec screen -r $session
+        elif [[ $use_multiplexer = tmux ]]; then
+            exec tmux attach-session -t $session
+        fi
+    fi
 fi
 
 
 
 
-autoload -U tetris
-zle -N tetris
-bindkey ^T tetris
+
+#---------
+# Imports
+#---------
+
+loading=`pwd`
+cd ~
+
+#---Aliases---
+if [ -f "$my_aliases" ]; then
+	source "$my_aliases"
+else
+   echo "File $my_aliases does not exist."
+fi
+
+
+
+cd $loading

@@ -83,8 +83,14 @@ set softtabstop=4
 set noexpandtab
 
 
+"make <C-q> and <C-s> reach vim
+silent !stty -ixon > /dev/null 2>/dev/null
+
+
 "tabs
 nnoremap <silent> <C-t> :tabnew<CR>
+nnoremap <silent> <C-w> :q<CR>
+nnoremap <silent> <C-q> :qa<CR>
 nnoremap <silent> <C-Left> :tabprevious<CR>
 nnoremap <silent> <C-Right> :tabnext<CR>
 nnoremap = :tabedit 
@@ -92,6 +98,7 @@ nnoremap = :tabedit
 
 "other key mappings
 inoremap jj <Esc>
+inoremap jk <Esc>
 set pastetoggle=<F2>
 
 
