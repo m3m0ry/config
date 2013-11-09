@@ -99,7 +99,6 @@ nnoremap = :tabedit
 "other key mappings
 inoremap jj <Esc>
 inoremap jk <Esc>
-set pastetoggle=<F2>
 
 
 "aliases
@@ -107,5 +106,7 @@ cnoreabbrev <expr> W ((getcmdtype() is# ':' && getcmdline() is# 'W') ? ('w') : (
 nnoremap <C-d> :q<CR>
 
 
-"enable mouse
+"copy'n'paste and mouse stuff
 set mouse=a
+set pastetoggle=<F2>
+vnoremap <C-c> "+y
