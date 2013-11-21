@@ -438,42 +438,44 @@ TRAPINT() {
 
 
 
-use_multiplexer=screen
+if [[ -n $SSH_CONNECTION ]]; then
+	use_multiplexer=screen
 
 # If not already in screen or tmux, reattach to a running session or create a
 # new one. This also starts screen/tmux on a remote server when connecting
 # through ssh.
-if [[ $TERM != dumb && $TERM != linux && -z $STY && -z $TMUX ]]; then
-    # Get running detached sessions.
-    if [[ $use_multiplexer = screen ]]; then
-        session=$(screen -list | grep 'Detached' | awk '{ print $1; exit }')
-    elif [[ $use_multiplexer = tmux ]]; then
-        session=$(tmux list-sessions 2>/dev/null \
-                  | sed '/(attached)$/ d; s/^\([0-9]\{1,\}\).*$/\1/; q')
-    fi
+	if [[ $TERM != dumb && $TERM != linux && -z $STY && -z $TMUX ]]; then
+		# Get running detached sessions.
+		if [[ $use_multiplexer = screen ]]; then
+			session=$(screen -list | grep 'Detached' | awk '{ print $1; exit }')
+		elif [[ $use_multiplexer = tmux ]]; then
+			session=$(tmux list-sessions 2>/dev/null \
+					  | sed '/(attached)$/ d; s/^\([0-9]\{1,\}\).*$/\1/; q')
+		fi
 
-    # As we exec later we have to set the title here.
-    if [[ $use_multiplexer = screen ]]; then
-        window_preexec "screen"
-    elif [[ $use_multiplexer = tmux ]]; then
-        window_preexec "tmux"
-    fi
+		# As we exec later we have to set the title here.
+		if [[ $use_multiplexer = screen ]]; then
+			window_preexec "screen"
+		elif [[ $use_multiplexer = tmux ]]; then
+			window_preexec "tmux"
+		fi
 
-    # Create a new session if none is running.
-    if [[ -z $session ]]; then
-        if [[ $use_multiplexer = screen ]]; then
-            exec screen
-        elif [[ $use_multiplexer = tmux ]]; then
-            exec tmux
-        fi
-    # Reattach to a running session.
-    else
-        if [[ $use_multiplexer = screen ]]; then
-            exec screen -r $session
-        elif [[ $use_multiplexer = tmux ]]; then
-            exec tmux attach-session -t $session
-        fi
-    fi
+		# Create a new session if none is running.
+		if [[ -z $session ]]; then
+			if [[ $use_multiplexer = screen ]]; then
+				exec screen
+			elif [[ $use_multiplexer = tmux ]]; then
+				exec tmux
+			fi
+		# Reattach to a running session.
+		else
+			if [[ $use_multiplexer = screen ]]; then
+				exec screen -r $session
+			elif [[ $use_multiplexer = tmux ]]; then
+				exec tmux attach-session -t $session
+			fi
+		fi
+	fi
 fi
 
 
