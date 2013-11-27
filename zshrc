@@ -2,7 +2,7 @@
 #Import Files
 #------------
 my_aliases=".zsh/aliases"
-
+my_exports=".zsh/exports"
 
 
 
@@ -104,7 +104,7 @@ setopt PUSHD_TO_HOME
 
 # Keep 5000 lines of history within the shell and save it to ~/.zsh_history:
 export HISTSIZE=50000
-export SAVEHIST=50000
+export SAVEHIST=500
 export HISTFILE=~/.zsh/zsh_history
 # If this is set, zsh sessions will append their history list to the
 # history file, rather than replace it. Thus, multiple parallel zsh
@@ -496,6 +496,11 @@ else
    echo "File $my_aliases does not exist."
 fi
 
+
+#---Exports---
+if [ -f "$my_exports" ]; then
+	source "$my_exports"
+fi
 
 
 cd $loading
