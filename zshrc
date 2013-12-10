@@ -8,7 +8,7 @@ my_exports=".zsh/exports"
 
 #TODO: complete the completion and move it to the right place in zshrc
 # Use modern completion system
-autoload -U compinit
+autoload -Uz compinit
 compinit
 
 #after double-TAB you can sellect with arrowkeys from a menu
@@ -66,7 +66,7 @@ setopt autopushd
 # option set) is not a directory, and does not begin with a slash, try
 # to expand the expression as if it were preceded by a '~' (see the
 # section 'Filename Expansion'). 
-setopt cdablevars
+#setopt cdablevars
 # Resolve symbolic links to their true values when changing directory.
 # This also has the effect of CHASE_DOTS, i.e. a '..' path segment 
 # will be treated as referring to the physical parent, even if the 
