@@ -11,4 +11,6 @@ defscrollback 50000
 # available.
 shell zsh
 
-
+hardstatus on
+hardstatus alwayslastline
+hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a"
