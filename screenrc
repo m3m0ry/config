@@ -1,3 +1,4 @@
+#!/bin/bash
 # Don't display startup message.
 startup_message off
 
@@ -10,7 +11,12 @@ defscrollback 50000
 # I prefer zsh as my shell. GNU screen displays a warning if the shell isn't
 # available.
 shell zsh
-
+#first window is 1 not 0
+bind c screen 1
+bind ^c screen 1
+bind 0 select 10                                                            
+screen 1
+#because we like colors
 hardstatus on
 hardstatus alwayslastline
 hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a"
