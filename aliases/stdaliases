@@ -1,0 +1,55 @@
+# Make sure aliases are expanded when using sudo.
+alias please='sudo '
+alias sudo='sudo '
+
+
+#search in history
+#usage: hs <word to be grepped>
+alias HS='fc -l 0|grep'
+
+
+# directory change
+alias cd..='cd ..'
+alias ..='cd ..'
+alias ..='cd ..'
+alias ....='cd ../../../'
+alias .....='cd ../../../../'
+alias ......='cd ../../../../../'
+alias .3='cd ../../../'
+alias .4='cd ../../../../'
+alias .5='cd ../../../../..'
+
+
+# modified commands
+alias c=clear
+alias g=git
+alias v='vim -p'
+alias vim='vim -p'
+alias grep='grep --color=auto'
+alias nano='nano -w'
+alias ping='ping -c 5'
+alias mkdir='mkdir -p -v'
+alias bc='bc -l'
+alias j='jobs -l'
+
+
+# ls configuration
+alias l=ls
+alias ls='ls --color=auto'
+alias la='ls -A'
+alias ll='ls -lah'
+alias lx='ll -BX'                   # sort by extension
+alias lz='ll -rS'                   # sort by size
+alias lt='ll -rt'                   # sort by date
+
+# saving my ass
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -I --preserve-root'
+alias chown='chown --preserve-root'
+alias chmod='chmod --preserve-root'
+alias chgrp='chgrp --preserve-root'
+alias wget='wget -c'
+
+# confused with vim
+alias :q=' exit'
