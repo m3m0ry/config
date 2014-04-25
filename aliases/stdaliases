@@ -43,7 +43,7 @@ alias lz='ll -rS'                   # sort by size
 alias lt='ll -rt'                   # sort by date
 
 # saving my ass
-alias cp='cp -i'
+alias cp='cp -i -a'
 alias mv='mv -i'
 alias rm='rm -I --preserve-root'
 alias chown='chown --preserve-root'

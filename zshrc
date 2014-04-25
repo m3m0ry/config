@@ -1,7 +1,8 @@
 #------------
 #Import Files
 #------------
-my_aliases=".zsh/aliases"
+zsh_aliases=".aliases/zshaliases"
+std_aliases=".aliases/stdaliases"
 my_exports=".zsh/exports"
 
 
@@ -490,10 +491,16 @@ loading=`pwd`
 cd ~
 
 #---Aliases---
-if [ -f "$my_aliases" ]; then
-	source "$my_aliases"
+if [ -f "$std_aliases" ]; then
+	source "$std_aliases"
 else
-   echo "File $my_aliases does not exist."
+   echo "File $std_aliases does not exist."
+fi
+
+if [ -f "$zsh_aliases" ]; then
+	source "$zsh_aliases"
+else
+   echo "File $zsh_aliases does not exist."
 fi
 
 

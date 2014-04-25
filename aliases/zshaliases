@@ -1,6 +1,3 @@
-# Make sure aliases are expanded when using sudo.
-alias sudo='sudo '
-
 # Global
 alias -g A='| awk'
 alias -g H='| head'
@@ -27,22 +24,4 @@ alias -g .......='../../../../../..'
 alias -s pdf="evince"
 alias -s c="vim"
 alias -s log="less"
-
-#search in history
-#usage: hs <word to be grepped>
-alias HG='fc -l 0|grep'
-
-
-# my aliases
-alias c=clear
-alias g=git
-alias l=ls
-alias v='vim -p'
-alias vim='vim -p'
-alias grep='grep --color=auto'
-
-# ls configuration
-alias ls='ls --color=auto'
-alias la='ls -a'
-alias ll='ls -lah'
 
