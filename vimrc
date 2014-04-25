@@ -47,7 +47,8 @@ set lazyredraw
 
 "syntax highlighting'n stuff
 filetype plugin indent on
-colorscheme Tomorrow-Night-Blue
+colorscheme desert
+set background=dark
 syntax on
 
 
@@ -73,6 +74,10 @@ set ruler
 set number
 set showcmd
 set scrolloff=7
+set wrap
+" Linebreak on 500 characters
+set lbr
+set tw=500
 
 
 "indentation
@@ -81,6 +86,15 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set noexpandtab
+
+" Treat long lines as break lines (useful when moving around in them)
+map j gj
+map k gk
+
+" Visual mode pressing * or # searches for the current selection
+" Super useful! From an idea by Michael Naumann
+vnoremap <silent> * :call VisualSelection('f')<CR>
+vnoremap <silent> # :call VisualSelection('b')<CR>
 
 
 "make <C-q> and <C-s> reach vim
@@ -110,3 +124,33 @@ nnoremap <C-d> :q<CR>
 set mouse=a
 set pastetoggle=<F2>
 vnoremap <C-c> "+y
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Helper functions
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! CmdLine(str)
+    exe "menu Foo.Bar :" . a:str
+    emenu Foo.Bar
+    unmenu Foo
+endfunction
+
+function! VisualSelection(direction) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", '\\/.*$^~[]')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'b'
+        execute "normal ?" . l:pattern . "^M"
+    elseif a:direction == 'gv'
+        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
+    elseif a:direction == 'replace'
+        call CmdLine("%s" . '/'. l:pattern . '/')
+    elseif a:direction == 'f'
+        execute "normal /" . l:pattern . "^M"
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
