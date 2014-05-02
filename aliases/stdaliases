@@ -24,6 +24,7 @@ alias .5='cd ../../../../..'
 # modified commands
 alias c=clear
 alias g=git
+alias hc='herbstclient '
 alias v='vim -p'
 alias vim='vim -p'
 alias grep='grep --color=auto'

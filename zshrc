@@ -15,8 +15,6 @@ compinit
 #after double-TAB you can sellect with arrowkeys from a menu
 zstyle ':completion:*' menu select
 
-#copmlete your aliases too
-setopt completealiases
 
 # hosts completion for a few commands
 compctl -k hosts ftp lftp ncftp ssh w3m lynx links elinks nc telnet rlogin host
