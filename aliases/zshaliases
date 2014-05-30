@@ -14,7 +14,7 @@ alias -g NUL="> /dev/null 2>&1"
 
 
 # fast directory change
-alias -g ...='../..'
+alias -g ...='../../'
 alias -g ....='../../..'
 alias -g .....='../../../..'
 alias -g ......='../../../../..'
