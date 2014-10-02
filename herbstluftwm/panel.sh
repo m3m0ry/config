@@ -65,12 +65,8 @@ hc pad $monitor $panel_height
     while true ; do
         # "date" output is checked once a second, but an event is only
         # generated if the output changed compared to the previous run.
-        date +$'date\t^fg(#efefef)%H:%M^fg(#909090), %Y-^fg(#efefef)%m-%d'
-
-		#TODO
-		#DO SOMEHOW THE SAME AS DATE :)
-		vol=$(amixer get Master | grep dB | sed 's/.*\(\[[0-9]*%\]\).*/\1/')
-		volume +$'volume\t$(vol)'
+		echo "volume$(amixer get Master | grep dB | sed 's/.*\(\[[0-9]*%\]\).*/\1/')"
+        date +$'date\t^fg(#efefef)%H:%M^fg(#909090), %Y-%m-^fg(#efefef)%d'
         sleep 1 || break
     done > >(uniq_linebuffered) &
     childpid=$!
@@ -81,7 +77,6 @@ hc pad $monitor $panel_height
     visible=true
     date=""
     windowtitle=""
-	#TODO???
 	volume=""
     while true ; do
 
@@ -124,7 +119,6 @@ hc pad $monitor $panel_height
         echo -n "$separator"
         echo -n "^bg()^fg() ${windowtitle//^/^^}"
         # small adjustments
-		#TODO???
         right="$separator^bg() $date $separator $volume"
         right_text_only=$(echo -n "$right" | sed 's.\^[^(]*([^)]*)..g')
         # get width of right aligned text.. and add some space..
@@ -152,10 +146,9 @@ hc pad $monitor $panel_height
                 #echo "resetting date" >&2
                 date="${cmd[@]:1}"
                 ;;
-				#TODO!!!!!
-			volume)
+			volume*)
 				#echo "resetting volume" >&2
-				volume=${cmd[@]:1}
+				volume="${cmd[0]:6}"
 				;;
             quit_panel)
                 exit
