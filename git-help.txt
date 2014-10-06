@@ -63,6 +63,11 @@ Aenderungen Rueckaengig machen
 	weiterarbeiten
 
 Tips und Tricks
+	Gui: gitk, tig
+	Farbige Ausgabe: git config color.ui true
+	Eine Zeile pro Commit in  der Logasgabe: git config format.pretty oneline
+	Interaktives Hinzufuegen von Aenderungen: get add -i
+
 
 
 
