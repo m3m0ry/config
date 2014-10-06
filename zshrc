@@ -311,7 +311,6 @@ zle -N zle-line-init
 zle -N zle-keymap-select
 
 
-
 prompt_precmd() {
     # Setup. Create variables holding the formatted content.
 
@@ -335,9 +334,12 @@ prompt_precmd() {
     # Exit code in bright red if not zero.
     local exitcode="%(?..(${red}%B%?%b${default}%) )"
 
+	local git=$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f3)
 
-    PROMPT="${clock}${red}-${default}${user}${red}@${default}${host} ${background}${exitcode}
+
+    PROMPT="${clock}${red}-${default}${user}${red}@${default}${host} ${background}${exitcode}${vcs_info_msg_0_}${git}
 ${directory} "
+
 }
 precmd_functions+=(prompt_precmd)
 
