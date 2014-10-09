@@ -10,6 +10,8 @@ Aenderungen adden und commiten
 	-> Aenderungen sind im Index
 	git commit -m "<Nachricht"
 	->Aenderungen sind im HEAD
+	git reset <date>
+	->unadd
 
 Aenderungen Hochladen
 	git push
