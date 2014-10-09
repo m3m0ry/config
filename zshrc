@@ -298,7 +298,7 @@ local red="%{${fg[red]}%}"
 local blue="%{${fg[blue]}%}"
 local green="%{${fg[green]}%}"
 local yellow="%{${fg[yellow]}%}"
-local default="%{${fg[default]}%}"
+local default="%{${fg[default]}%b%}"
 
 
 
@@ -318,22 +318,19 @@ zstyle ':vcs_info:*' enable git svn
 # Turn on and configure the version control system information
 # TODO: set git as you wish
 autoload -Uz vcs_info
-precmd () { vcs_info }
-zstyle ':vcs_info:*' get-revision true
-zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:*' formats '%u%c|%s:%b'
-zstyle ':vcs_info:*' actionformats '%c%u|%s@%a:%b'
-zstyle ':vcs_info:*' branchformat '%b@%r'
-zstyle ':vcs_info:*' unstagedstr "%{$fg_no_bold[red]%}"
-zstyle ':vcs_info:*' stagedstr "%{$fg_no_bold[yellow]%}"
-zstyle ':vcs_info:*' enable fossil hg svn git cvs # p4 off, but must be last.
 
-# vcs-specific formatting...
-zstyle ':vcs_info:hg*:*' hgrevformat "%r"
-zstyle ':vcs_info:fossil:*' fsrevformat '%.5h'
+#zstyle ':vcs_info:*' get-revision true
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' formats 'f %u%c|%s:%b'
+zstyle ':vcs_info:*' actionformats 'a %c%u|%s@%a:%b'
+zstyle ':vcs_info:*' branchformat 'bformat%b@%r'
+zstyle ':vcs_info:*' unstagedstr "%{${red}U${default}%}"
+zstyle ':vcs_info:*' stagedstr "%{${yellow}S${default}%}"
+zstyle ':vcs_info:*' enable git
+
 # Silly git doesn't honor branchformat
-zstyle ':vcs_info:git*:*' formats '%c%u|%s@%a:%b@%.5i'
-zstyle ':vcs_info:git*:*' actionformats '%c%u|%s@%a:%b@%.5i'
+zstyle ':vcs_info:git*:*' formats "%{${green}${blue}%B[$fg_no_bold[blue]%s$fg_no_bold[default]:$fg_bold[blue]%r$fg_no_bold[default]:${green}%B%b${blue}] %c%u$fg_no_bold[default]%}"
+zstyle ':vcs_info:git*:*' actionformats "%{${green}${blue}%B[$fg_no_bold[blue]%s$fg_no_bold[default]:$fg_bold[blue]%r$fg_no_bold[default]:${green}%B%b${blue}] %c%u$fg_no_bold[default] ${red}%a%}"
 
 
 
@@ -348,12 +345,12 @@ prompt_precmd() {
     #local clock="${blue}[${green}%T %D${blue}]${default}"
 
     # User name (%n) in bright green.
-    local user="${green}%B%n%b${default}"
+    local user="${green}%n${default}"
     # Host name (%m) in bright green; underlined if running on a remote
     # system through SSH.
-    local host="${green}%B%m%b${default}"
+    local host="${green}%m${default}"
     if [[ -n $SSH_CONNECTION ]]; then
-        host="%U${host}%u"
+        host="%B%U${host}%u%b"
     fi
 
     # Number of background processes in yellow.
