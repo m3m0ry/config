@@ -1,9 +1,10 @@
 #------------
 #Import Files
 #------------
-zsh_aliases=".aliases/zshaliases"
+zsh_aliases=".zsh/zshaliases"
 std_aliases=".aliases/stdaliases"
 my_exports=".zsh/exports"
+my_functions=".zsh/zsh_functions"
 
 
 
@@ -101,7 +102,7 @@ setopt PUSHD_TO_HOME
 # History
 #---------
 
-# Keep 5000 lines of history within the shell and save it to ~/.zsh_history:
+# Keep 5000 lines of history within the shell and save it to ~/.zsh/zsh_history:
 export HISTSIZE=50000
 export SAVEHIST=500
 export HISTFILE=~/.zsh/zsh_history
@@ -310,6 +311,9 @@ function zle-line-init zle-keymap-select {
 zle -N zle-line-init
 zle -N zle-keymap-select
 
+autoload -Uz vcs_info
+#zstyle ':vcs_info:*' enable git svn
+
 
 
 prompt_precmd() {
@@ -338,52 +342,12 @@ prompt_precmd() {
 	local git=$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f3)
 
 
-    PROMPT="${clock}${red}-${default}${user}${red}@${default}${host} ${background}${exitcode}${vcs_info_msg_0_}${git}
+    PROMPT="${clock}${red}-${default}${user}${red}@${default}${host} ${background}${exitcode}${vcs_info_msg_0}${git}
 ${directory} "
 
 }
 precmd_functions+=(prompt_precmd)
 
-
-
-
-
-#-----------------
-# Extract archive
-#-----------------
-# copied and modified for my needs from http://zshwiki.org/home/examples/functions
-# Author: Copyright © 2005 Eric P. Mangold - teratorn (-at-) gmail (-dot) com
-# License: MIT. http://www.opensource.org/licenses/mit-license.html 
-
-# this fucntion can extract any usuall archives
-
-extract_archive () {
-    local old_dirs current_dirs lower
-    lower=${(L)1}
-    old_dirs=( *(N/) )
-    if [[ $lower == *.tar.gz || $lower == *.tgz ]]; then
-        tar zxfv $1
-    elif [[ $lower == *.gz ]]; then
-        gunzip $1
-    elif [[ $lower == *.tar.bz2 || $lower == *.tbz ]]; then
-        bunzip2 -c $1 | tar xfv -
-    elif [[ $lower == *.bz2 ]]; then
-        bunzip2 $1
-    elif [[ $lower == *.zip ]]; then
-        unzip $1
-    elif [[ $lower == *.rar ]]; then
-        unrar e $1
-    elif [[ $lower == *.tar ]]; then
-        tar xfv $1
-    elif [[ $lower == *.lha ]]; then
-        lha e $1
-    else
-        print "Unknown archive type: $1"
-        return 1
-    fi
-}
-alias extract=extract_archive
-compdef '_files -g "*.gz *.tgz *.bz2 *.tbz *.zip *.rar *.tar *.lha"' extract_archive
 
 
 #-------
@@ -479,8 +443,6 @@ if [[ -n $SSH_CONNECTION ]]; then
 			fi
 		fi
 	fi
-else
-	echo "fuck no ssh"
 fi
 
 
@@ -509,6 +471,11 @@ fi
 #---Exports---
 if [ -f "$my_exports" ]; then
 	source "$my_exports"
+fi
+
+#---Functions---
+if [ -f "$my_functions" ]; then
+	source "$my_functions"
 fi
 
 
