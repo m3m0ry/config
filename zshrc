@@ -322,7 +322,7 @@ zstyle ':vcs_info:git*:*' check-for-changes true
 
 # hash changes branch misc
 zstyle ':vcs_info:git*' formats "(%s) %c%u %b%m"
-zstyle ':vcs_info:git*' actionformats "(%s|%a) %c%u %b%m"
+zstyle ':vcs_info:git*' actionformats "(%s|%a) ${red}%c%u %b%m"
 
 prompt_precmd() {
     # Setup. Create variables holding the formatted content.
