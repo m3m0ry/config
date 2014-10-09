@@ -314,10 +314,15 @@ zle -N zle-keymap-select
 
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git svn
-zstyle ':vcs_info:git*' formats "%s %r %b %m%u%c% "
 
 
 
+zstyle ':vcs_info:git*:*' get-revision true
+zstyle ':vcs_info:git*:*' check-for-changes true
+
+# hash changes branch misc
+zstyle ':vcs_info:git*' formats "(%s) %12.12i %c%u %b%m"
+zstyle ':vcs_info:git*' actionformats "(%s|%a) %12.12i %c%u %b%m"
 
 prompt_precmd() {
     # Setup. Create variables holding the formatted content.
