@@ -314,6 +314,8 @@ zle -N zle-keymap-select
 
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git svn
+zstyle ':vcs_info:git*' formats "%s %r %b %m%u%c% "
+
 
 
 
@@ -325,7 +327,7 @@ prompt_precmd() {
     local directory="${yellow}%~%#${default}"
 
     # Current time (seconds since epoch) in Hex in bright blue.
-    local clock="${blue}[${green}%T %D${blue}]${default}"
+    #local clock="${blue}[${green}%T %D${blue}]${default}"
 
     # User name (%n) in bright green.
     local user="${green}%B%n%b${default}"
@@ -342,7 +344,7 @@ prompt_precmd() {
     local exitcode="%(?..(${red}%B%?%b${default}%) )"
 
 
-    PROMPT="${clock}${red}-${default}${user}${red}@${default}${host} ${background}${exitcode}${vcs_info_msg_0_}
+    PROMPT="${user}${red}@${default}${host} ${background}${exitcode}${vcs_info_msg_0_}
 ${directory} "
 
 }
