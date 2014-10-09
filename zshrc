@@ -207,7 +207,8 @@ setopt C_BASES
 # except that an implicit return statement is executed instead of an
 # exit. This will trigger an exit at the outermost level of a
 # non-interactive script. 
-setopt ERR_RETURN
+# Cannt use it if you want to use vcs_info
+#setopt ERR_RETURN
 # When executing a shell function or sourcing a script, set $0
 # temporarily to the name of the function/script. 
 setopt FUNCTION_ARGZERO
@@ -312,12 +313,13 @@ zle -N zle-line-init
 zle -N zle-keymap-select
 
 autoload -Uz vcs_info
-#zstyle ':vcs_info:*' enable git svn
+zstyle ':vcs_info:*' enable git svn
 
 
 
 prompt_precmd() {
     # Setup. Create variables holding the formatted content.
+	vcs_info
 
     # Current directory in yellow
     local directory="${yellow}%~%#${default}"
@@ -339,10 +341,8 @@ prompt_precmd() {
     # Exit code in bright red if not zero.
     local exitcode="%(?..(${red}%B%?%b${default}%) )"
 
-	local git=$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f3)
 
-
-    PROMPT="${clock}${red}-${default}${user}${red}@${default}${host} ${background}${exitcode}${vcs_info_msg_0}${git}
+    PROMPT="${clock}${red}-${default}${user}${red}@${default}${host} ${background}${exitcode}${vcs_info_msg_0_}
 ${directory} "
 
 }
