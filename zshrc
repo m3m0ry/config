@@ -315,14 +315,27 @@ zle -N zle-keymap-select
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git svn
 
+# Turn on and configure the version control system information
+# TODO: set git as you wish
+autoload -Uz vcs_info
+precmd () { vcs_info }
+zstyle ':vcs_info:*' get-revision true
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' formats '%u%c|%s:%b'
+zstyle ':vcs_info:*' actionformats '%c%u|%s@%a:%b'
+zstyle ':vcs_info:*' branchformat '%b@%r'
+zstyle ':vcs_info:*' unstagedstr "%{$fg_no_bold[red]%}"
+zstyle ':vcs_info:*' stagedstr "%{$fg_no_bold[yellow]%}"
+zstyle ':vcs_info:*' enable fossil hg svn git cvs # p4 off, but must be last.
+
+# vcs-specific formatting...
+zstyle ':vcs_info:hg*:*' hgrevformat "%r"
+zstyle ':vcs_info:fossil:*' fsrevformat '%.5h'
+# Silly git doesn't honor branchformat
+zstyle ':vcs_info:git*:*' formats '%c%u|%s@%a:%b@%.5i'
+zstyle ':vcs_info:git*:*' actionformats '%c%u|%s@%a:%b@%.5i'
 
 
-zstyle ':vcs_info:git*:*' get-revision true
-zstyle ':vcs_info:git*:*' check-for-changes true
-
-# hash changes branch misc
-zstyle ':vcs_info:git*' formats "(%s) %c%u %b%m"
-zstyle ':vcs_info:git*' actionformats "(%s|%a) ${red}%c%u %b%m"
 
 prompt_precmd() {
     # Setup. Create variables holding the formatted content.
