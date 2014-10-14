@@ -115,6 +115,11 @@ netwidget = widget({ type = "textbox" })
 -- Register Widget
 vicious.register(netwidget, vicious.widgets.net, 'Wlan:<span color="#CC9393">${wlan0 down_kb}</span> <span color="#7F9F7F">${wlan0 up_kb}</span>kb',3)
 
+-- Wifi widget
+wifiwidget = widget({ type = "textbox" })
+--TODO why not working?
+vicious.register(wifiwidget, vicious.widgets.wifi, " ${ssid} ${linp}%", 7, "wlan0")
+
 
 
 -- Mixer widget
@@ -131,16 +136,19 @@ vicious.register(cpuwidget, vicious.widgets.cpu, "Cpu:$1%", 2)
 
 -- Baterry widget
 batterywidget = widget({ type = "textbox" })
---batterywidget = awful.widget.progressbar()
---batterywidget:set_width(8)
---batterywidget:set_height(10)
---batterywidget:set_vertical(true)
---batterywidget:set_background_color("#494B4F")
---batterywidget:set_border_color(nil)
-----batterywidget:set_color({type="linear", from = {0, 0}, to = { 0, 10 }, stops = { { 0, "#AECF96" }, { 0.5, "#88A175" }, { 1, "#FF5656"} } })
---batterywidget:set_color("#AECF96")
---batterywidget:set_gradient_colors({ "#AECF96", "#88A176", "#FF5656" })
 vicious.register(batterywidget, vicious.widgets.bat, "Akku:$2% $3 $1", 59, "BAT0")
+
+-- Baterry progressbar widget
+
+batwidget = awful.widget.progressbar()
+batwidget:set_width(8)
+batwidget:set_height(10)
+batwidget:set_vertical(true)
+batwidget:set_background_color("#494B4F")
+batwidget:set_border_color(nil)
+batwidget:set_color("#AECF96")
+batwidget:set_gradient_colors({ "#AECF96", "#88A175", "#FF5656" })
+vicious.register(batwidget, vicious.widgets.bat, "$2", 1, "BAT0")
 
 -- Gmail widget
 gmailwidget = widget({ type = "textbox" })
@@ -228,7 +236,8 @@ for s = 1, screen.count() do
         mytextclock,
 		separator,
 		mixerwidget,
-		separator,
+		separator, 
+		wifiwidget,
 		netwidget,
 		separator,
 		memwidget,
@@ -236,6 +245,7 @@ for s = 1, screen.count() do
 		cpuwidget,
 		separator,
 		batterywidget,	
+		batwidget,
 		separator,
 		gmailwidget,
 		separator,
