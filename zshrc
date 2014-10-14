@@ -342,7 +342,7 @@ prompt_precmd() {
     local directory="${yellow}%~%#${default}"
 
     # Current time (seconds since epoch) in Hex in bright blue.
-    #local clock="${blue}[${green}%T %D${blue}]${default}"
+    local clock="${blue}[${green}%T${blue}]${default}"
 
     # User name (%n) in bright green.
     local user="${green}%n${default}"
@@ -359,7 +359,7 @@ prompt_precmd() {
     local exitcode="%(?..(${red}%B%?%b${default}%) )"
 
 
-    PROMPT="${user}${red}@${default}${host} ${background}${exitcode}${vcs_info_msg_0_}
+    PROMPT="${clock} ${user}${red}@${default}${host} ${background}${exitcode}${vcs_info_msg_0_}
 ${directory} "
 
 }

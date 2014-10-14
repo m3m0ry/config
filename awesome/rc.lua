@@ -108,47 +108,108 @@ mytextclock = awful.widget.textclock({ align = "right" })
 --					separator:set_text(" :: ")
 separator = widget({ type = "textbox" })
 separator.text = " :: "
+-- Spacer
+spacer = widget({ type = "textbox" })
+spacer.text = " "
+
+
+-- { Keyboard map indicator and changer
+kbdcfg = {}
+kbdcfg.cmd = "setxkbmap"
+kbdcfg.layout = { "us", "de", "cz" , "ru"}
+kbdcfg.current = 1  -- us is our default layout
+kbdcfg.widget = widget({ type = "textbox", align = "right" })
+kbdcfg.widget.text = kbdcfg.layout[kbdcfg.current]
+kbdcfg.switch = function (sel)
+	if (sel == 0 or sel > #(kbdcfg.layout)) then 
+	   kbdcfg.current = kbdcfg.current % #(kbdcfg.layout) + 1
+   else
+	   kbdcfg.current = sel;
+   end
+   local t = " " .. kbdcfg.layout[kbdcfg.current] .. " "
+   kbdcfg.widget.text = t
+   os.execute( kbdcfg.cmd .. t )
+end
+
+langmenu = { }
+for i, lang in ipairs(kbdcfg.layout) do
+	langmenu[i] = { lang , function () kbdcfg.switch(i) end}
+end
+mylangmenu = awful.menu( { items = langmenu } )
+
+-- Mouse bindings
+kbdcfg.widget:buttons(awful.util.table.join(
+	awful.button({ }, 1, function () kbdcfg.switch(0) end),
+	awful.button({ }, 3, function () mylangmenu:toggle() end)
+))
+-- }
+
 
 -- Network usage widget
 -- for awesome 3.5 use wibox.widget.textbox()
 netwidget = widget({ type = "textbox" })
--- Register Widget
 vicious.register(netwidget, vicious.widgets.net, 'Wlan:<span color="#CC9393">${wlan0 down_kb}</span> <span color="#7F9F7F">${wlan0 up_kb}</span>kb',3)
 
 -- Wifi widget
 wifiwidget = widget({ type = "textbox" })
---TODO why not working?
-vicious.register(wifiwidget, vicious.widgets.wifi, " ${ssid} ${linp}%", 7, "wlan0")
-
-
+vicious.register(wifiwidget, vicious.widgets.wifi, "${ssid} ${linp}%", 7, "wlan0")
 
 -- Mixer widget
 mixerwidget = widget({ type = "textbox" })
-vicious.register(mixerwidget, vicious.widgets.volume, "$2$1", 2, "-c 1 Master")
+mixerbar = awful.widget.progressbar()
+mixerbar:set_width(10):set_height(20)
+mixerbar:set_vertical(true)
+mixerbar:set_background_color("#494B4F")
+mixerbar:set_border_color(nil)
+mixerbar:set_color("#666666")
+mixerbar:set_gradient_colors({ "#000000", "#222222", "#444444" })
+vicious.register(mixerbar, vicious.widgets.volume, 
+				function (widget, args)
+					mixerwidget.text = args[2] .. " "
+					return args[1]
+				end, 1, "-c 1 Master")
 
 -- Memory usage widget
-memwidget = widget({ type = "textbox" })
-vicious.register(memwidget, vicious.widgets.mem, "Mem:$1%($2/$3)MB", 5)
+memwidget = awful.widget.progressbar()
+memwidget:set_width(10)
+memwidget:set_height(20)
+memwidget:set_vertical(true)
+memwidget:set_background_color("#494B4F")
+memwidget:set_border_color(nil)
+memwidget:set_color("#666666")
+memwidget:set_gradient_colors({ "#AECF96", "#88A175", "#FF5656" })
+memwidget.widget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn("xterm") end) ))
+memwidget.mouse_enter = function () awful.util.spawn("xterm") end
+
+vicious.cache(vicious.widgets.mem)
+vicious.register(memwidget, vicious.widgets.mem,
+				function (widget, args)
+					--memwidget_t:set_text(" RAM: " .. args[2] .. "MB / " .. args[3] .. "MB ")
+					return args[1]
+				end, 10)
 
 -- Cpu usage widget
 cpuwidget = widget({ type = "textbox" })
 vicious.register(cpuwidget, vicious.widgets.cpu, "Cpu:$1%", 2)
 
--- Baterry widget
-batterywidget = widget({ type = "textbox" })
-vicious.register(batterywidget, vicious.widgets.bat, "Akku:$2% $3 $1", 59, "BAT0")
-
 -- Baterry progressbar widget
-
 batwidget = awful.widget.progressbar()
-batwidget:set_width(8)
-batwidget:set_height(10)
-batwidget:set_vertical(true)
+batwidget:set_width(10):set_height(20):set_ticks_size(2)
+batwidget:set_vertical(true):set_ticks(true)
 batwidget:set_background_color("#494B4F")
 batwidget:set_border_color(nil)
-batwidget:set_color("#AECF96")
+batwidget:set_color("#666666")
 batwidget:set_gradient_colors({ "#AECF96", "#88A175", "#FF5656" })
+-- Baterry widget
+batterywidget = widget({ type = "textbox" })
+vicious.register(batterywidget, vicious.widgets.bat,
+				function (widget, args)
+					batwidget:set_value(args[2])
+					return args[1]
+				end	, 59, "BAT0")
+
 vicious.register(batwidget, vicious.widgets.bat, "$2", 1, "BAT0")
+
 
 -- Gmail widget
 gmailwidget = widget({ type = "textbox" })
@@ -167,9 +228,10 @@ mytaglist.buttons = awful.util.table.join(
                     awful.button({ }, 1, awful.tag.viewonly),
                     awful.button({ modkey }, 1, awful.client.movetotag),
                     awful.button({ }, 3, awful.tag.viewtoggle),
-                    awful.button({ modkey }, 3, awful.client.toggletag),
-                    awful.button({ }, 4, awful.tag.viewnext),
-                    awful.button({ }, 5, awful.tag.viewprev)
+                    awful.button({ modkey }, 3, awful.client.toggletag)
+					--Dont scroll tags
+                    --awful.button({ }, 4, awful.tag.viewnext),
+                    --awful.button({ }, 5, awful.tag.viewprev)
                     )
 mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
@@ -193,15 +255,16 @@ mytasklist.buttons = awful.util.table.join(
                                               else
                                                   instance = awful.menu.clients({ width=250 })
                                               end
-                                          end),
-                     awful.button({ }, 4, function ()
-                                              awful.client.focus.byidx(1)
-                                              if client.focus then client.focus:raise() end
-                                          end),
-                     awful.button({ }, 5, function ()
-                                              awful.client.focus.byidx(-1)
-                                              if client.focus then client.focus:raise() end
                                           end))
+	--Dont scroll windows 
+--                     awful.button({ }, 4, function ()
+--                                              awful.client.focus.byidx(1)
+--                                              if client.focus then client.focus:raise() end
+--                                          end),
+--                     awful.button({ }, 5, function ()
+--                                              awful.client.focus.byidx(-1)
+--                                              if client.focus then client.focus:raise() end
+--                                          end))
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
@@ -211,9 +274,10 @@ for s = 1, screen.count() do
     mylayoutbox[s] = awful.widget.layoutbox(s)
     mylayoutbox[s]:buttons(awful.util.table.join(
                            awful.button({ }, 1, function () awful.layout.inc(layouts, 1) end),
-                           awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
-                           awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
-                           awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
+                           awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end)))
+						   --Dont scroll layouts
+                           --awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
+                           --awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
     -- Create a taglist widget
     mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, mytaglist.buttons)
 
@@ -234,18 +298,18 @@ for s = 1, screen.count() do
         },
         mylayoutbox[s],
         mytextclock,
-		separator,
-		mixerwidget,
+		separator, kbdcfg.widget,
+		separator, mixerbar.widget, mixerwidget,
 		separator, 
 		wifiwidget,
 		netwidget,
 		separator,
-		memwidget,
+		memwidget.widget,
 		separator,
 		cpuwidget,
 		separator,
 		batterywidget,	
-		batwidget,
+		batwidget.widget,
 		separator,
 		gmailwidget,
 		separator,
@@ -266,6 +330,23 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+	--Togle mute
+	awful.key({ }, "XF86AudioMute", function() awful.util.spawn( "amixer set Master toggle") end),
+	--Volume up
+	awful.key({ }, "XF86AudioRaiseVolume", function() awful.util.spawn( "amixer -c 1 set Master 5+") end),
+	--Volume down
+	awful.key({ }, "XF86AudioLowerVolume", function() awful.util.spawn( "amixer -c 1 set Master 5-") end),
+	--Toggle mic-mute
+	awful.key({ }, "XF86AudioMicMute", function() awful.util.spawn( "amixer -c 1 set Mic toggle") end),
+	--Brightness Up
+	awful.key({ }, "XF86MonBrightnessUp", function() awful.util.spawn( "xbacklight -inc 10") end),
+	--Brightness Down
+	awful.key({ }, "XF86MonBrightnessDown", function() awful.util.spawn( "xbacklight -dec 10") end),
+
+
+
+
+
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
@@ -294,6 +375,8 @@ globalkeys = awful.util.table.join(
             end
         end),
 
+	-- Lock screen
+    awful.key({ modkey,           }, "F12", function () awful.util.spawn("slock") end),
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
@@ -318,6 +401,7 @@ globalkeys = awful.util.table.join(
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
               end)
+
 )
 
 clientkeys = awful.util.table.join(
