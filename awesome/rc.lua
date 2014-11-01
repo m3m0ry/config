@@ -41,6 +41,7 @@ end
 -- Themes define colours, icons, and wallpapers
 beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 
+
 -- This is used later as the default terminal and editor to run.
 terminal = "xterm"
 editor = os.getenv("EDITOR") or "vim"
@@ -76,7 +77,7 @@ layouts =
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, {layouts[1], layouts[3], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], })
 end
 -- }}}
 
@@ -339,9 +340,9 @@ globalkeys = awful.util.table.join(
 	--Toggle mic-mute
 	awful.key({ }, "XF86AudioMicMute", function() awful.util.spawn( "amixer -c 1 set Mic toggle") end),
 	--Brightness Up
-	awful.key({ }, "XF86MonBrightnessUp", function() awful.util.spawn( "xbacklight -inc 10") end),
+	awful.key({ }, "XF86MonBrightnessUp", function() awful.util.spawn( "xbacklight -inc 5") end),
 	--Brightness Down
-	awful.key({ }, "XF86MonBrightnessDown", function() awful.util.spawn( "xbacklight -dec 10") end),
+	awful.key({ }, "XF86MonBrightnessDown", function() awful.util.spawn( "xbacklight -dec 5") end),
 
 
 
