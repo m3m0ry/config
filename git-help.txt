@@ -1,0 +1,77 @@
+New Repository
+	git init
+
+Repository auschecken
+	git clone <pfad/benutzername@host:/pafd>
+
+Aenderungen adden und commiten
+	git add <datei>
+	git add * (danger?)
+	-> Aenderungen sind im Index
+	git commit -m "<Nachricht"
+	->Aenderungen sind im HEAD
+	git reset <date>
+	->unadd
+
+Aenderungen Hochladen
+	git push
+	git push origin master
+	git push <wohin> <branch>
+
+	git remote add origin <server>
+	->zur Verbindung, falls nicht geclonet
+
+Branches
+	git checkout -b <branch_name>
+	->erstellt neuen branch
+
+	git checkout <branch>
+	->wechselt zum Branch (z.B.: master)
+
+	git branch -d <branch>
+	->loescht branch
+
+	git push origin <branch>
+	->damit auch andere ihn sehen
+
+Update & Merge
+	git pull
+	->vom origin updates holen
+
+	git merge <branch>
+	->Zusammen fuehren von aktuellen und <branch>
+
+	Falls konflikte -> per Hand editieren und per git add <dateiname> 
+
+	git diff <quell_branch> <ziel_branch>
+	->Aenderungen:
+
+Tagging
+	git tag 1.0.0 <commit_id>
+	-> Taggt den Commit
+
+	git log
+	->Commit_IDs
+
+
+Aenderungen Rueckaengig machen
+	git checkout -- <filename>
+	->Datei wird auf letzten stand im HEAD zurueckgesetzt (letzter commit)
+
+
+	git fetch origin
+	git reset --hard origin/master
+	->Alles lokale uber bord schmeissen, und sauber mit dem origin
+	weiterarbeiten
+
+Tips und Tricks
+	Gui: gitk, tig
+	Farbige Ausgabe: git config color.ui true
+	Eine Zeile pro Commit in  der Logasgabe: git config format.pretty oneline
+	Interaktives Hinzufuegen von Aenderungen: get add -i
+
+
+
+More will follow
+
+

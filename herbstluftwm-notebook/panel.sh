@@ -65,7 +65,15 @@ hc pad $monitor $panel_height
     while true ; do
         # "date" output is checked once a second, but an event is only
         # generated if the output changed compared to the previous run.
-		echo "volume$(amixer get Master | grep dB | sed 's/.*\(\[[0-9]*%\]\).*/\1/')"
+		mixer=$(amixer -c 1 get Master | grep dB)
+		test=$(echo "$mixer" | sed 's/.*\(off\).*/\1/')
+		if [ $test == "off" ] ; then
+			mixer="[off]"
+		else
+			mixer=$(echo $mixer | sed 's/.*\(\[[0-9]*%\]\).*/\1/')
+		fi
+		
+		echo "volume$mixer"
         date +$'date\t^fg(#efefef)%H:%M^fg(#909090), %Y-%m-^fg(#efefef)%d'
         sleep 1 || break
     done > >(uniq_linebuffered) &

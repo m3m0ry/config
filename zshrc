@@ -1,9 +1,10 @@
 #------------
 #Import Files
 #------------
-zsh_aliases=".aliases/zshaliases"
+zsh_aliases=".zsh/zshaliases"
 std_aliases=".aliases/stdaliases"
 my_exports=".zsh/exports"
+my_functions=".zsh/zsh_functions"
 
 
 
@@ -101,7 +102,7 @@ setopt PUSHD_TO_HOME
 # History
 #---------
 
-# Keep 5000 lines of history within the shell and save it to ~/.zsh_history:
+# Keep 5000 lines of history within the shell and save it to ~/.zsh/zsh_history:
 export HISTSIZE=50000
 export SAVEHIST=500
 export HISTFILE=~/.zsh/zsh_history
@@ -206,7 +207,8 @@ setopt C_BASES
 # except that an implicit return statement is executed instead of an
 # exit. This will trigger an exit at the outermost level of a
 # non-interactive script. 
-setopt ERR_RETURN
+# Cannt use it if you want to use vcs_info
+#setopt ERR_RETURN
 # When executing a shell function or sourcing a script, set $0
 # temporarily to the name of the function/script. 
 setopt FUNCTION_ARGZERO
@@ -296,7 +298,7 @@ local red="%{${fg[red]}%}"
 local blue="%{${fg[blue]}%}"
 local green="%{${fg[green]}%}"
 local yellow="%{${fg[yellow]}%}"
-local default="%{${fg[default]}%}"
+local default="%{${fg[default]}%b%}"
 
 
 
@@ -310,24 +312,45 @@ function zle-line-init zle-keymap-select {
 zle -N zle-line-init
 zle -N zle-keymap-select
 
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git svn
+
+# Turn on and configure the version control system information
+# TODO: set git as you wish
+autoload -Uz vcs_info
+
+#zstyle ':vcs_info:*' get-revision true
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' formats 'f %u%c|%s:%b'
+zstyle ':vcs_info:*' actionformats 'a %c%u|%s@%a:%b'
+zstyle ':vcs_info:*' branchformat 'bformat%b@%r'
+zstyle ':vcs_info:*' unstagedstr "%{${red}U${default}%}"
+zstyle ':vcs_info:*' stagedstr "%{${yellow}S${default}%}"
+zstyle ':vcs_info:*' enable git
+
+# Silly git doesn't honor branchformat
+zstyle ':vcs_info:git*:*' formats "%{${green}${blue}%B[$fg_no_bold[blue]%s$fg_no_bold[default]:$fg_bold[blue]%r$fg_no_bold[default]:${green}%B%b${blue}] %c%u$fg_no_bold[default]%}"
+zstyle ':vcs_info:git*:*' actionformats "%{${green}${blue}%B[$fg_no_bold[blue]%s$fg_no_bold[default]:$fg_bold[blue]%r$fg_no_bold[default]:${green}%B%b${blue}] %c%u$fg_no_bold[default] ${red}%a%}"
+
 
 
 prompt_precmd() {
     # Setup. Create variables holding the formatted content.
+	vcs_info
 
     # Current directory in yellow
     local directory="${yellow}%~%#${default}"
 
     # Current time (seconds since epoch) in Hex in bright blue.
-    local clock="${blue}[${green}%T %D${blue}]${default}"
+    local clock="${blue}[${green}%T${blue}]${default}"
 
     # User name (%n) in bright green.
-    local user="${green}%B%n%b${default}"
+    local user="${green}%n${default}"
     # Host name (%m) in bright green; underlined if running on a remote
     # system through SSH.
-    local host="${green}%B%m%b${default}"
+    local host="${green}%m${default}"
     if [[ -n $SSH_CONNECTION ]]; then
-        host="%U${host}%u"
+        host="%B%U${host}%u%b"
     fi
 
     # Number of background processes in yellow.
@@ -336,51 +359,12 @@ prompt_precmd() {
     local exitcode="%(?..(${red}%B%?%b${default}%) )"
 
 
-    PROMPT="${clock}${red}-${default}${user}${red}@${default}${host} ${background}${exitcode}
+    PROMPT="${clock} ${user}${red}@${default}${host} ${background}${exitcode}${vcs_info_msg_0_}
 ${directory} "
+
 }
 precmd_functions+=(prompt_precmd)
 
-
-
-
-
-#-----------------
-# Extract archive
-#-----------------
-# copied and modified for my needs from http://zshwiki.org/home/examples/functions
-# Author: Copyright © 2005 Eric P. Mangold - teratorn (-at-) gmail (-dot) com
-# License: MIT. http://www.opensource.org/licenses/mit-license.html 
-
-# this fucntion can extract any usuall archives
-
-extract_archive () {
-    local old_dirs current_dirs lower
-    lower=${(L)1}
-    old_dirs=( *(N/) )
-    if [[ $lower == *.tar.gz || $lower == *.tgz ]]; then
-        tar zxfv $1
-    elif [[ $lower == *.gz ]]; then
-        gunzip $1
-    elif [[ $lower == *.tar.bz2 || $lower == *.tbz ]]; then
-        bunzip2 -c $1 | tar xfv -
-    elif [[ $lower == *.bz2 ]]; then
-        bunzip2 $1
-    elif [[ $lower == *.zip ]]; then
-        unzip $1
-    elif [[ $lower == *.rar ]]; then
-        unrar e $1
-    elif [[ $lower == *.tar ]]; then
-        tar xfv $1
-    elif [[ $lower == *.lha ]]; then
-        lha e $1
-    else
-        print "Unknown archive type: $1"
-        return 1
-    fi
-}
-alias extract=extract_archive
-compdef '_files -g "*.gz *.tgz *.bz2 *.tbz *.zip *.rar *.tar *.lha"' extract_archive
 
 
 #-------
@@ -438,46 +422,45 @@ TRAPINT() {
 
 
 if [[ -n $SSH_CONNECTION ]]; then
-	use_multiplexer=screen
+	zshrc_use_multiplexer=screen
 
-# If not already in screen or tmux, reattach to a running session or create a
-# new one. This also starts screen/tmux on a remote server when connecting
-# through ssh.
+
+	# If not already in screen or tmux, reattach to a running session or create a
+	# new one. This also starts screen/tmux on a remote server when connecting
+	# through ssh.
 	if [[ $TERM != dumb && $TERM != linux && -z $STY && -z $TMUX ]]; then
 		# Get running detached sessions.
-		if [[ $use_multiplexer = screen ]]; then
+		if [[ $zshrc_use_multiplexer = screen ]]; then
 			session=$(screen -list | grep 'Detached' | awk '{ print $1; exit }')
-		elif [[ $use_multiplexer = tmux ]]; then
+		elif [[ $zshrc_use_multiplexer = tmux ]]; then
 			session=$(tmux list-sessions 2>/dev/null \
 					  | sed '/(attached)$/ d; s/^\([0-9]\{1,\}\).*$/\1/; q')
 		fi
 
-		# As we exec later we have to set the title here.
-		if [[ $use_multiplexer = screen ]]; then
-			window_preexec "screen"
-		elif [[ $use_multiplexer = tmux ]]; then
-			window_preexec "tmux"
-		fi
+		## As we exec later we have to set the title here.
+		#if [[ $zshrc_use_multiplexer = screen ]]; then
+		#	zshrc_window_preexec screen
+		#elif [[ $zshrc_use_multiplexer = tmux ]]; then
+		#	zshrc_window_preexec tmux
+		#fi
 
 		# Create a new session if none is running.
 		if [[ -z $session ]]; then
-			if [[ $use_multiplexer = screen ]]; then
+			if [[ $zshrc_use_multiplexer = screen ]]; then
 				exec screen
-			elif [[ $use_multiplexer = tmux ]]; then
+			elif [[ $zshrc_use_multiplexer = tmux ]]; then
 				exec tmux
 			fi
 		# Reattach to a running session.
 		else
-			if [[ $use_multiplexer = screen ]]; then
+			if [[ $zshrc_use_multiplexer = screen ]]; then
 				exec screen -r $session
-			elif [[ $use_multiplexer = tmux ]]; then
+			elif [[ $zshrc_use_multiplexer = tmux ]]; then
 				exec tmux attach-session -t $session
 			fi
 		fi
 	fi
 fi
-
-
 
 
 
@@ -505,6 +488,11 @@ fi
 #---Exports---
 if [ -f "$my_exports" ]; then
 	source "$my_exports"
+fi
+
+#---Functions---
+if [ -f "$my_functions" ]; then
+	source "$my_functions"
 fi
 
 

@@ -43,8 +43,8 @@ hc keybind $Mod-Right use_index +1
 hc keybind $Mod-Left  use_index -1
 
 #volume
-hc keybind $Mod-Up spawn amixer -q set Master 1+
-hc keybind $Mod-Down spawn amixer -q set Master 1-
+#hc keybind $Mod-Up spawn amixer -q set Master 1+
+#hc keybind $Mod-Down spawn amixer -q set Master 1-
 
 # layouting
 hc keybind $Mod-r remove
@@ -114,7 +114,8 @@ hc unlock
 # hc move_monitor 0 1280x1024+0+0
 # hc add_monitor 1280x1024+1280+0
 xrandr --auto
-hc detect_monitors
+hc detect_monitor
+xbindkeys
 
 # find the panel
 panel=~/.config/herbstluftwm/panel.sh

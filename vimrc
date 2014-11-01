@@ -29,14 +29,15 @@ augroup END
 
 
 
-
-
-
-"no backup files but a large history
+"no backup files but a large history and undofiles
 set history=500
 set nobackup
 set nowb
 set noswapfile
+set undofile
+set undodir=~/.vim/undo
+set undolevels=1000
+set undoreload=10000
 
 
 "misc
@@ -48,7 +49,10 @@ set lazyredraw
 "syntax highlighting'n stuff
 filetype plugin indent on
 colorscheme desert
+"colorscheme oh-la-la
 set background=dark
+set cursorcolumn
+set cursorline
 syntax on
 
 
@@ -73,12 +77,11 @@ nnoremap i :let @/ = ""<CR>i
 set ruler
 set number
 set showcmd
-set scrolloff=7
+set scrolloff=5
 set wrap
 " Linebreak on 500 characters
-set lbr
-set tw=500
-
+"set lbr
+set tw=80
 
 "indentation
 set autoindent
@@ -102,17 +105,26 @@ silent !stty -ixon > /dev/null 2>/dev/null
 
 
 "tabs
-nnoremap <silent> <C-t> :tabnew<CR>
+nnoremap <C-t> :tabe 
 nnoremap <silent> <C-w> :q<CR>
 nnoremap <silent> <C-q> :qa<CR>
 nnoremap <silent> <C-Left> :tabprevious<CR>
 nnoremap <silent> <C-Right> :tabnext<CR>
-nnoremap = :tabedit 
+nnoremap <silent> <C-h> :tabprevious<CR>
+nnoremap <silent> <C-l> :tabnext<CR>
 
 
 "other key mappings
 inoremap jj <Esc>
 inoremap jk <Esc>
+" exit insert all modes with <C-k>
+inoremap <C-k> <Esc>
+cnoremap <C-k> <Esc>
+nnoremap <C-k> <Esc>
+vnoremap <C-k> <Esc>
+xnoremap <C-k> <Esc>
+snoremap <C-k> <Esc>
+onoremap <C-k> <Esc>
 
 
 "aliases
@@ -122,8 +134,7 @@ nnoremap <C-d> :q<CR>
 
 "copy'n'paste and mouse stuff
 set mouse=a
-set pastetoggle=<F2>
-vnoremap <C-c> "+y
+"set pastetoggle=<F2>vnoremap <C-c> "+y
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
