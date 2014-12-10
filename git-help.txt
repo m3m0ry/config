@@ -21,6 +21,9 @@ Aenderungen Hochladen
 	git remote add origin <server>
 	->zur Verbindung, falls nicht geclonet
 
+	git push origin :python-script
+	->branch in der repo auch loeschen (nach lokalen git barnch -d python-script
+
 Branches
 	git checkout -b <branch_name>
 	->erstellt neuen branch
