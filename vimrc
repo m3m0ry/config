@@ -29,6 +29,10 @@ augroup END
 
 
 
+
+autocmd Filetype gitcommit setlocal spell textwidth=72
+
+
 "no backup files but a large history and undofiles
 set history=500
 set nobackup
@@ -81,7 +85,7 @@ set scrolloff=5
 set wrap
 " Linebreak on 500 characters
 "set lbr
-set tw=80
+"set tw=80
 
 "indentation
 set autoindent
