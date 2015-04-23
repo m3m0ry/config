@@ -38,11 +38,13 @@ set history=500
 set nobackup
 set nowb
 set noswapfile
-set undofile
-set undodir=~/.vim/undo
 set undolevels=1000
-set undoreload=10000
 
+if version >= 703
+	set undofile
+	set undodir=~/.vim/undo
+	set undoreload=10000
+endif
 
 "misc
 set autoread
