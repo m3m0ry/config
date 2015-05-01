@@ -2,6 +2,7 @@
 require("awful")
 require("awful.autofocus")
 require("awful.rules")
+require("awful.client")
 -- Theme handling library
 require("beautiful")
 -- Notification library
@@ -354,10 +355,10 @@ globalkeys = awful.util.table.join(
 
     awful.key({ modkey,           }, "w", function () mymainmenu:show({keygrabber=true}) end),
 
-    awful.key({ modkey,           }, "j", function () awful.client.focus.bydirection("down") end),
-    awful.key({ modkey,           }, "k", function () awful.client.focus.bydirection("up") end),
-    awful.key({ modkey,           }, "l",     function () awful.client.focus.bydirection("right") end),
-    awful.key({ modkey,           }, "h",     function () awful.client.focus.bydirection("left") end),
+    awful.key({ modkey,           }, "j",	function () awful.client.focus.bydirection("down") end),
+    awful.key({ modkey,           }, "k",	function () awful.client.focus.bydirection("up") end),
+    awful.key({ modkey,           }, "l",   function () awful.client.focus.bydirection("right") end),
+    awful.key({ modkey,           }, "h",   function () awful.client.focus.bydirection("left") end),
 
 
     -- Layout manipulation
@@ -365,6 +366,7 @@ globalkeys = awful.util.table.join(
     --awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.bydirection("down")    end),
     awful.key({ modkey, "Shift"   }, "j", function () awful.tag.incmwfact(0.05) end),
     awful.key({ modkey, "Shift"   }, "k", function () awful.tag.incmwfact(-0.05)    end),
+	--TODO here??
     awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
     awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
@@ -411,7 +413,8 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-    awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
+    awful.key({ modkey,           }, "o",      function (c) awful.client.movetoscreen(c, c.screen-1) end), 
+    awful.key({ modkey,           }, "p",      function (c) awful.client.movetoscreen(c, c.screen+1) end),
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
     awful.key({ modkey,           }, "n",
@@ -452,6 +455,7 @@ for i = 1, keynumber do
                           awful.tag.viewtoggle(tags[screen][i])
                       end
                   end),
+--TODO what is this?
         awful.key({ modkey, "Shift" }, "#" .. i + 9,
                   function ()
                       if client.focus and tags[client.focus.screen][i] then
