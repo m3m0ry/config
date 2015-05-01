@@ -66,6 +66,7 @@ Aenderungen Rueckaengig machen
 	git reset --hard origin/master
 	->Alles lokale uber bord schmeissen, und sauber mit dem origin
 	weiterarbeiten
+	git rebase -i <log>
 
 Tips und Tricks
 	Gui: gitk, tig
