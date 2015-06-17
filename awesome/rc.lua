@@ -40,7 +40,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+beautiful.init("/home/hrom/.config/awesome/theme.lua")
 
 
 -- This is used later as the default terminal and editor to run.
