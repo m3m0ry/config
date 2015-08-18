@@ -164,7 +164,14 @@ kbdcfg.widget:buttons(awful.util.table.join(
 
 -- Network usage widget
 netwidget = wibox.widget.textbox()
-vicious.register(netwidget, vicious.widgets.net, 'Wlan:<span color="#CC9393">${wlan0 down_kb}</span> <span color="#7F9F7F">${wlan0 up_kb}</span> kb',3)
+vicious.cache(vicious.widgets.net)
+vicious.register(netwidget, vicious.widgets.net,
+		function (widget, args)
+			if args["{eth0 carrier}"] == 1 then return '⌁<span color="#CC9393">' .. args["{eth0 down_kb}"] .. '</span> <span color="#7F9F7F">' .. args["{eth0 up_kb}"] .. '</span> kb'
+			elseif args["{wlan0 carrier}"] == 1 then return '↯<span color="#CC9393">' .. args["{wlan0 down_kb}"] .. '</span> <span color="#7F9F7F">' .. args["{wlan0 up_kb}"] .. '</span> kb'
+			else return '<span color="#CC9393">Wrong Carrier</span>'
+			end
+		end,3)
 
 -- Wifi widget
 wifiwidget = wibox.widget.textbox()
@@ -333,6 +340,7 @@ for s = 1, screen.count() do
 	right_layout:add(separator)
 	right_layout:add(cpuwidget)
 	right_layout:add(separator)
+	right_layout:add(wifiwidget)
 	right_layout:add(netwidget)
 	right_layout:add(separator)
 	right_layout:add(memwidget)
