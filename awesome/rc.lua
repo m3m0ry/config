@@ -119,7 +119,6 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 -- {{{ Wibox
 -- Create a textclock widget
---mytextclock = awful.widget.textclock()
 mytextclock = awful.widget.textclock()
 
 -- Separator
@@ -163,7 +162,7 @@ kbdcfg.widget:buttons(awful.util.table.join(
 
 
 -- Network usage widget
-netwidget = wibox.widget.textbox()
+local netwidget = wibox.widget.textbox()
 vicious.cache(vicious.widgets.net)
 vicious.register(netwidget, vicious.widgets.net,
 		function (widget, args)
@@ -174,50 +173,52 @@ vicious.register(netwidget, vicious.widgets.net,
 		end,3)
 
 -- Wifi widget
-wifiwidget = wibox.widget.textbox()
+local wifiwidget = wibox.widget.textbox()
 vicious.register(wifiwidget, vicious.widgets.wifi, "${ssid} ${linp}%", 7, "wlan0")
 
 -- Mixer widget
-mixerwidget = wibox.widget.textbox()
-mixerbar = awful.widget.progressbar()
+local mixerwidget = wibox.widget.textbox()
+local mixerbar = awful.widget.progressbar()
+local mixerbutton = wibox.widget.textbox()
+mixerbutton:buttons(awful.util.table.join(
+	awful.button({ }, 1, function () awful.util.spawn( "amixer set Master toggle")
+		vicious.force({mixerwidget}) end),
+	awful.button({ }, 4, function () awful.util.spawn( "amixer -c 0 set Master 5+")
+		vicious.force({mixerbar}) end),
+	awful.button({ }, 5, function () awful.util.spawn( "amixer -c 0 set Master 5-")
+		vicious.force({mixerbar}) end)
+	))
+vicious.register(mixerwidget, vicious.widgets.volume, "$2", 1, "-c 0 Master")
+mixerwidget:buttons(mixerbutton:buttons())
 mixerbar:set_width(10):set_height(20)
 mixerbar:set_vertical(true)
 mixerbar:set_background_color("#494B4F")
 mixerbar:set_border_color(nil)
 mixerbar:set_color("#666666")
 mixerbar:set_color({type = "linear", from  = {0,0}, to = {0, 20}, stops = { { 0, "#000000"}, {0.5, "#222222"}, {1, "#444444"}}})
-vicious.register(mixerbar, vicious.widgets.volume, 
-				function (widget, args)
-					mixerwidget:set_text(args[2] .. " ")
-					return args[1]
-				end, 1, "-c 1 Master")
+mixerbar:buttons(mixerbutton:buttons())
+vicious.register(mixerbar, vicious.widgets.volume, "$1", 1, "-c 0 Master")
+
 
 -- Memory usage widget
-memwidget = awful.widget.progressbar()
+local memwidget = awful.widget.progressbar()
 memwidget:set_width(10)
 memwidget:set_height(20)
 memwidget:set_vertical(true)
 memwidget:set_background_color("#494B4F")
 memwidget:set_border_color(nil)
 memwidget:set_color("#666666")
-memwidget:set_color({type = "linear", from  = {0,0}, to = {0, 20}, stops = { { 0, "#AECF96"}, {0.5, "#88A175"}, {1, "#FF5656"}}})
---TODO
---memwidget.widget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn("xterm") end) ))
---memwidget.mouse_enter = function () awful.util.spawn("xterm") end
+memwidget:set_color({type = "linear", from  = {0,0}, to = {0, 20}, stops = { { 0, "#FF5656"}, {0.5, "#88A175"}, {1, "#AECF96"}}})
 
 vicious.cache(vicious.widgets.mem)
-vicious.register(memwidget, vicious.widgets.mem,
-				function (widget, args)
-					--memwidget_t:set_text(" RAM: " .. args[2] .. "MB / " .. args[3] .. "MB ")
-					return args[1]
-				end, 10)
+vicious.register(memwidget, vicious.widgets.mem,"$1", 10)
 
 -- Cpu usage widget
-cpuwidget = wibox.widget.textbox()
+local cpuwidget = wibox.widget.textbox()
 vicious.register(cpuwidget, vicious.widgets.cpu, "Cpu:$1%", 2)
 
 -- Baterry progressbar widget
-batwidget = awful.widget.progressbar()
+local batwidget = awful.widget.progressbar()
 batwidget:set_width(10):set_height(20):set_ticks_size(2)
 batwidget:set_vertical(true):set_ticks(true)
 batwidget:set_background_color("#494B4F")
@@ -226,13 +227,8 @@ batwidget:set_color("#666666")
 batwidget:set_color({type = "linear", from  = {0,0}, to = {0, 20}, stops = { { 0, "#AECF96"}, {0.5, "#88A175"}, {1, "#FF5656"}}})
 -- Baterry widget
 batterywidget = wibox.widget.textbox()
-vicious.register(batterywidget, vicious.widgets.bat,
-				function (widget, args)
-					batwidget:set_value(args[2])
-					return args[1]
-				end	, 59, "BAT0")
-
-vicious.register(batwidget, vicious.widgets.bat, "$2", 1, "BAT0")
+vicious.register(batterywidget, vicious.widgets.bat, "$1", 59, "BAT0")
+vicious.register(batwidget, vicious.widgets.bat, "$2", 5, "BAT0")
 
 
 -- Gmail widget
@@ -332,25 +328,25 @@ for s = 1, screen.count() do
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
 	
-	right_layout:add(separator)
-	right_layout:add(gmailwidget)
-	right_layout:add(separator)
-	right_layout:add(batwidget)
-	right_layout:add(batterywidget)
-	right_layout:add(separator)
-	right_layout:add(cpuwidget)
-	right_layout:add(separator)
-	right_layout:add(wifiwidget)
-	right_layout:add(netwidget)
-	right_layout:add(separator)
-	right_layout:add(memwidget)
-	right_layout:add(separator)
-	right_layout:add(mixerwidget)
-	right_layout:add(mixerbar)
-	right_layout:add(separator)
-	right_layout:add(kbdcfg.widget)
-	right_layout:add(separator)
-    right_layout:add(mytextclock)
+	if s == 1 then right_layout:add(separator) end
+	if s == 1 then right_layout:add(gmailwidget) end
+	if s == 1 then right_layout:add(separator) end
+	if s == 1 then right_layout:add(batwidget) end
+	if s == 1 then right_layout:add(batterywidget) end
+	if s == 1 then right_layout:add(separator) end
+	if s == 1 then right_layout:add(cpuwidget) end
+	if s == 1 then right_layout:add(separator) end
+	if s == 1 then right_layout:add(wifiwidget) end
+	if s == 1 then right_layout:add(netwidget) end
+	if s == 1 then right_layout:add(separator) end
+	if s == 1 then right_layout:add(memwidget) end
+	if s == 1 then right_layout:add(separator) end
+	if s == 1 then right_layout:add(mixerwidget) end
+	if s == 1 then right_layout:add(mixerbar) end
+	if s == 1 then right_layout:add(separator) end
+	if s == 1 then right_layout:add(kbdcfg.widget) end
+	if s == 1 then right_layout:add(separator) end
+    if s == 1 then right_layout:add(mytextclock) end
     right_layout:add(mylayoutbox[s])
 
     -- Now bring it all together (with the tasklist in the middle)
@@ -376,11 +372,11 @@ globalkeys = awful.util.table.join(
 	--Togle mute
 	awful.key({ }, "XF86AudioMute", function() awful.util.spawn( "amixer set Master toggle") end),
 	--Volume up
-	awful.key({ }, "XF86AudioRaiseVolume", function() awful.util.spawn( "amixer -c 1 set Master 5+") end),
+	awful.key({ }, "XF86AudioRaiseVolume", function() awful.util.spawn( "amixer -c 0 set Master 5+") end),
 	--Volume down
-	awful.key({ }, "XF86AudioLowerVolume", function() awful.util.spawn( "amixer -c 1 set Master 5-") end),
+	awful.key({ }, "XF86AudioLowerVolume", function() awful.util.spawn( "amixer -c 0 set Master 5-") end),
 	--Toggle mic-mute
-	awful.key({ }, "XF86AudioMicMute", function() awful.util.spawn( "amixer -c 1 set Mic toggle") end),
+	awful.key({ }, "XF86AudioMicMute", function() awful.util.spawn( "amixer -c 0 set Mic toggle") end),
 	--Brightness Up
 	awful.key({ }, "XF86MonBrightnessUp", function() awful.util.spawn( "xbacklight -inc 5") end),
 	--Brightness Down
@@ -393,10 +389,10 @@ globalkeys = awful.util.table.join(
 
     awful.key({ modkey,           }, "w", function () mymainmenu:show({keygrabber=true}) end),
 
-    awful.key({ modkey,           }, "j",	function () awful.client.focus.bydirection("down") end),
-    awful.key({ modkey,           }, "k",	function () awful.client.focus.bydirection("up") end),
-    awful.key({ modkey,           }, "l",   function () awful.client.focus.bydirection("right") end),
-    awful.key({ modkey,           }, "h",   function () awful.client.focus.bydirection("left") end),
+    awful.key({ modkey,           }, "j",	function () awful.client.focus.global_bydirection("down") end),
+    awful.key({ modkey,           }, "k",	function () awful.client.focus.global_bydirection("up") end),
+    awful.key({ modkey,           }, "l",   function () awful.client.focus.global_bydirection("right") end),
+    awful.key({ modkey,           }, "h",   function () awful.client.focus.global_bydirection("left") end),
 
 
     -- Layout manipulation
