@@ -14,7 +14,15 @@ local menubar = require("menubar")
 -- Load Debian menu entries
 require("debian.menu")
 
+
 local vicious = require("vicious")
+
+--Sound card number
+local cardNr = 0
+if (vicious.widgets.os()[4] == "hrombook") then
+	cardNr = 1;
+end
+
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -182,13 +190,13 @@ local mixerbar = awful.widget.progressbar()
 local mixerbutton = wibox.widget.textbox()
 mixerbutton:buttons(awful.util.table.join(
 	awful.button({ }, 1, function () awful.util.spawn( "amixer set Master toggle")
-		vicious.force({mixerwidget}) end),
-	awful.button({ }, 4, function () awful.util.spawn( "amixer -c 0 set Master 5+")
 		vicious.force({mixerbar}) end),
-	awful.button({ }, 5, function () awful.util.spawn( "amixer -c 0 set Master 5-")
-		vicious.force({mixerbar}) end)
+	awful.button({ }, 4, function () awful.util.spawn( "amixer -c " .. cardNr .. " set Master 5+")
+		vicious.force({mixerbar}) end),
+	awful.button({ }, 5, function () awful.util.spawn( "amixer -c " .. cardNr .. " set Master 5-")
+		vicious.force({mixerbar}) end),
+	awful.button({ }, 3, function () awful.util.spawn(terminal .. " -e alsamixer") end)
 	))
-vicious.register(mixerwidget, vicious.widgets.volume, "$2", 1, "-c 0 Master")
 mixerwidget:buttons(mixerbutton:buttons())
 mixerbar:set_width(10):set_height(20)
 mixerbar:set_vertical(true)
@@ -197,7 +205,11 @@ mixerbar:set_border_color(nil)
 mixerbar:set_color("#666666")
 mixerbar:set_color({type = "linear", from  = {0,0}, to = {0, 20}, stops = { { 0, "#000000"}, {0.5, "#222222"}, {1, "#444444"}}})
 mixerbar:buttons(mixerbutton:buttons())
-vicious.register(mixerbar, vicious.widgets.volume, "$1", 1, "-c 0 Master")
+vicious.register(mixerbar, vicious.widgets.volume,
+	function(widget, args)
+		mixerwidget:set_text(args[2])
+		return args[1]
+	end, 1, "-c " .. cardNr .. " Master")
 
 
 -- Memory usage widget
@@ -209,13 +221,19 @@ memwidget:set_background_color("#494B4F")
 memwidget:set_border_color(nil)
 memwidget:set_color("#666666")
 memwidget:set_color({type = "linear", from  = {0,0}, to = {0, 20}, stops = { { 0, "#FF5656"}, {0.5, "#88A175"}, {1, "#AECF96"}}})
-
 vicious.cache(vicious.widgets.mem)
 vicious.register(memwidget, vicious.widgets.mem,"$1", 10)
 
 -- Cpu usage widget
-local cpuwidget = wibox.widget.textbox()
-vicious.register(cpuwidget, vicious.widgets.cpu, "Cpu:$1%", 2)
+local cpuwidget = awful.widget.graph()
+cpuwidget:buttons(awful.util.table.join(
+	awful.button({ }, 1, function () awful.util.spawn(terminal .. " -e htop") end)
+	))
+cpuwidget:set_width(50)
+cpuwidget:set_background_color("#494B4F")
+cpuwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 50, 0 }, stops = { { 0, "#FF5656" }, { 0.5, "#88A175" }, { 1, "#AECF96" }}})
+vicious.cache(vicious.widgets.cpu)
+vicious.register(cpuwidget, vicious.widgets.cpu, "$1", 3)
 
 -- Baterry progressbar widget
 local batwidget = awful.widget.progressbar()
@@ -227,13 +245,15 @@ batwidget:set_color("#666666")
 batwidget:set_color({type = "linear", from  = {0,0}, to = {0, 20}, stops = { { 0, "#AECF96"}, {0.5, "#88A175"}, {1, "#FF5656"}}})
 -- Baterry widget
 batterywidget = wibox.widget.textbox()
-vicious.register(batterywidget, vicious.widgets.bat, "$1", 59, "BAT0")
-vicious.register(batwidget, vicious.widgets.bat, "$2", 5, "BAT0")
+--vicious.register(batterywidget, vicious.widgets.bat, "$1", 59, "BAT0")
+vicious.register(batwidget, vicious.widgets.bat, 
+	function( widget, args)
+		batterywidget:set_text(args[1])
+		return args[2] end, 59, "BAT0")
 
 
 -- Gmail widget
 gmailwidget = wibox.widget.textbox()
---vicious.register(gmailwidget, vicious.widgets.gmail, "Mail:${count}${subject}[0]", 61)
 vicious.register(gmailwidget, vicious.widgets.gmail, "Mail:${count}", 61)
 
 
@@ -336,10 +356,10 @@ for s = 1, screen.count() do
 	if s == 1 then right_layout:add(separator) end
 	if s == 1 then right_layout:add(cpuwidget) end
 	if s == 1 then right_layout:add(separator) end
+	if s == 1 then right_layout:add(memwidget) end
+	if s == 1 then right_layout:add(separator) end
 	if s == 1 then right_layout:add(wifiwidget) end
 	if s == 1 then right_layout:add(netwidget) end
-	if s == 1 then right_layout:add(separator) end
-	if s == 1 then right_layout:add(memwidget) end
 	if s == 1 then right_layout:add(separator) end
 	if s == 1 then right_layout:add(mixerwidget) end
 	if s == 1 then right_layout:add(mixerbar) end
@@ -370,11 +390,14 @@ root.buttons(awful.util.table.join(
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
 	--Togle mute
-	awful.key({ }, "XF86AudioMute", function() awful.util.spawn( "amixer set Master toggle") end),
+	awful.key({ }, "XF86AudioMute", function() awful.util.spawn( "amixer set Master toggle")
+		vicious.force({mixerwidget}) end),
 	--Volume up
-	awful.key({ }, "XF86AudioRaiseVolume", function() awful.util.spawn( "amixer -c 0 set Master 5+") end),
+	awful.key({ }, "XF86AudioRaiseVolume", function() awful.util.spawn( "amixer -c " ..  cardNr .. " set Master 5+")
+		vicious.force({mixerbar}) end),
 	--Volume down
-	awful.key({ }, "XF86AudioLowerVolume", function() awful.util.spawn( "amixer -c 0 set Master 5-") end),
+	awful.key({ }, "XF86AudioLowerVolume", function() awful.util.spawn( "amixer -c " .. cardNr ..  " set Master 5-")
+		vicious.force({mixerbar}) end),
 	--Toggle mic-mute
 	awful.key({ }, "XF86AudioMicMute", function() awful.util.spawn( "amixer -c 0 set Mic toggle") end),
 	--Brightness Up
