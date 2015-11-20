@@ -1,5 +1,33 @@
-" don't behave compatible to the old vi
-set nocompatible
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/git/Vundle.vim
+" call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+call vundle#begin('~/.vim/bundle')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+
+" A vim plugin to display the indention levels with thin vertical lines
+Plugin 'Yggdroot/indentLine'
+
+" A code-completion engine for Vim http://valloric.github.io/YouCompleteMe/
+Plugin 'Valloric/YouCompleteMe'
+
+call vundle#end()
+filetype plugin indent on
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+
 
 " restore cursor position to where it was before
 augroup JumpCursorOnEdit
@@ -27,9 +55,6 @@ augroup JumpCursorOnEdit
             \ endif
 augroup END
 
-
-
-
 autocmd Filetype gitcommit setlocal spell textwidth=72
 
 
@@ -54,7 +79,7 @@ set lazyredraw
 
 "syntax highlighting'n stuff
 filetype plugin indent on
-colorscheme desert
+colorscheme torte
 "colorscheme oh-la-la
 set background=dark
 set cursorcolumn
@@ -89,12 +114,28 @@ set wrap
 "set lbr
 "set tw=80
 
-"indentation
+"Indentation
 set autoindent
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-set noexpandtab
+set tabstop=3
+set shiftwidth=3
+set softtabstop=3
+set expandtab
+
+" Plugin Yggdroot/indentLine
+" Vim
+let g:indentLine_color_term = 31
+
+" "GVim
+let g:indentLine_color_gui = '#A4E57E'
+
+" " none X terminal
+let g:indentLine_color_tty_light = 7 " (default: 4)
+let g:indentLine_color_dark = 1 " (default: 2)
+
+let g:indentLine_char = '┊'
+let g:indentLine_enabled = 1
+let g:indentLine_leadingSpaceEnabled = 1
+
 
 " Treat long lines as break lines (useful when moving around in them)
 map j gj
@@ -140,7 +181,7 @@ nnoremap <C-d> :q<CR>
 
 "copy'n'paste and mouse stuff
 set mouse=a
-"set pastetoggle=<F2>vnoremap <C-c> "+y
+set pastetoggle=<F2>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
