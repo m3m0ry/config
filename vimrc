@@ -1,5 +1,5 @@
 set nocompatible              " be iMproved, required
-filetype off                  " required
+filetype off                  " required for vundle
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -10,7 +10,6 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-
 " A vim plugin to display the indention levels with thin vertical lines
 Plugin 'Yggdroot/indentLine'
 
@@ -19,6 +18,9 @@ Plugin 'Valloric/YouCompleteMe'
 
 " Generates config files for YouCompleteMe
 Plugin 'rdnetto/YCM-Generator'
+
+" UltiSnips - The ultimate snippet solution for Vim.
+Plugin 'SirVer/ultisnips'
 
 call vundle#end()
 filetype plugin indent on
@@ -89,7 +91,6 @@ set cursorcolumn
 set cursorline
 syntax on
 
-
 "statusline
 set laststatus=2
 set statusline=%F%m%r%h%w\ [%l,%v][%p%%]
@@ -98,7 +99,6 @@ set wildmode=list:longest,full
 set completeopt=menuone,preview
 set confirm
 
-
 "completion and searching
 set ignorecase
 set smartcase
@@ -106,12 +106,20 @@ set incsearch
 set hlsearch
 nnoremap i :let @/ = ""<CR>i
 
+" Plugin YouCompleteMe
 " Don't complete with TAB, use C-N and C-P instead
 let g:ycm_key_list_select_completion=[]
 let g:ycm_key_list_previous_completion=[]
 " close preview windows if leaving insert mode
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
 
 "visual goodies
 set ruler
@@ -133,14 +141,12 @@ set expandtab
 " Plugin Yggdroot/indentLine
 " Vim
 let g:indentLine_color_term = 31
-
-" "GVim
+" GVim
 let g:indentLine_color_gui = '#A4E57E'
-
-" " none X terminal
+" none X terminal
 let g:indentLine_color_tty_light = 7 " (default: 4)
 let g:indentLine_color_dark = 1 " (default: 2)
-
+" Other settings
 let g:indentLine_char = '┊'
 let g:indentLine_enabled = 1
 let g:indentLine_leadingSpaceEnabled = 1
@@ -159,7 +165,6 @@ vnoremap <silent> # :call VisualSelection('b')<CR>
 "make <C-q> and <C-s> reach vim
 silent !stty -ixon > /dev/null 2>/dev/null
 
-
 "tabs
 nnoremap <C-t> :tabe 
 nnoremap <silent> <C-w> :q<CR>
@@ -169,12 +174,8 @@ nnoremap <silent> <C-Right> :tabnext<CR>
 nnoremap <silent> <C-h> :tabprevious<CR>
 nnoremap <silent> <C-l> :tabnext<CR>
 
-
-
 " what is this?
 nnoremap <silent> <BS> :pop<CR>
-
-
 
 "other key mappings
 inoremap jj <Esc>
@@ -188,11 +189,9 @@ xnoremap <C-k> <Esc>
 snoremap <C-k> <Esc>
 onoremap <C-k> <Esc>
 
-
 "aliases
 cnoreabbrev <expr> W ((getcmdtype() is# ':' && getcmdline() is# 'W') ? ('w') : ('W'))
 nnoremap <C-d> :q<CR>
-
 
 "copy'n'paste and mouse stuff
 set mouse=a
