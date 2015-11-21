@@ -17,6 +17,9 @@ Plugin 'Yggdroot/indentLine'
 " A code-completion engine for Vim http://valloric.github.io/YouCompleteMe/
 Plugin 'Valloric/YouCompleteMe'
 
+" Generates config files for YouCompleteMe
+Plugin 'rdnetto/YCM-Generator'
+
 call vundle#end()
 filetype plugin indent on
 " Brief help
@@ -103,6 +106,12 @@ set incsearch
 set hlsearch
 nnoremap i :let @/ = ""<CR>i
 
+" Don't complete with TAB, use C-N and C-P instead
+let g:ycm_key_list_select_completion=[]
+let g:ycm_key_list_previous_completion=[]
+" close preview windows if leaving insert mode
+let g:ycm_autoclose_preview_window_after_insertion = 1
+
 
 "visual goodies
 set ruler
@@ -159,6 +168,12 @@ nnoremap <silent> <C-Left> :tabprevious<CR>
 nnoremap <silent> <C-Right> :tabnext<CR>
 nnoremap <silent> <C-h> :tabprevious<CR>
 nnoremap <silent> <C-l> :tabnext<CR>
+
+
+
+" what is this?
+nnoremap <silent> <BS> :pop<CR>
+
 
 
 "other key mappings

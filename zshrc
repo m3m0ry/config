@@ -313,7 +313,7 @@ zle -N zle-line-init
 zle -N zle-keymap-select
 
 autoload -Uz vcs_info
-zstyle ':vcs_info:*' enable git svn
+zstyle ':vcs_info:*' enable git svn hg
 
 # Turn on and configure the version control system information
 # TODO: set git as you wish
@@ -326,7 +326,7 @@ zstyle ':vcs_info:*' actionformats 'a %c%u|%s@%a:%b'
 zstyle ':vcs_info:*' branchformat 'bformat%b@%r'
 zstyle ':vcs_info:*' unstagedstr "%{${red}U${default}%}"
 zstyle ':vcs_info:*' stagedstr "%{${yellow}S${default}%}"
-zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:*' enable git hg
 
 # Silly git doesn't honor branchformat
 zstyle ':vcs_info:git*:*' formats "%{${green}${blue}%B[$fg_no_bold[blue]%s$fg_no_bold[default]:$fg_bold[blue]%r$fg_no_bold[default]:${green}%B%b${blue}] %c%u$fg_no_bold[default]%}"

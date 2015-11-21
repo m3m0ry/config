@@ -1,0 +1,7 @@
+[user]
+	name = Jan Hoenig
+	email = hrominium@gmail.com
+[push]
+	default = simple
+[status]
+	short = true
