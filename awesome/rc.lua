@@ -229,9 +229,10 @@ local cpuwidget = awful.widget.graph()
 cpuwidget:buttons(awful.util.table.join(
 	awful.button({ }, 1, function () awful.util.spawn(terminal .. " -e htop") end)
 	))
+cpuwidget:set_height(20)
 cpuwidget:set_width(50)
 cpuwidget:set_background_color("#494B4F")
-cpuwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 50, 0 }, stops = { { 0, "#FF5656" }, { 0.5, "#88A175" }, { 1, "#AECF96" }}})
+cpuwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 0, 20 }, stops = { { 0, "#FF5656" }, { 0.5, "#88A175" }, { 1, "#AECF96" }}})
 vicious.cache(vicious.widgets.cpu)
 vicious.register(cpuwidget, vicious.widgets.cpu, "$1", 3)
 
@@ -253,8 +254,9 @@ vicious.register(batwidget, vicious.widgets.bat,
 
 
 -- Gmail widget
-gmailwidget = wibox.widget.textbox()
-vicious.register(gmailwidget, vicious.widgets.gmail, "Mail:${count}", 61)
+-- cannot acces right now
+--gmailwidget = wibox.widget.textbox()
+--vicious.register(gmailwidget, vicious.widgets.gmail, "Mail:${count}", 61)
 
 
 -- Create a systray
@@ -349,7 +351,7 @@ for s = 1, screen.count() do
     if s == 1 then right_layout:add(wibox.widget.systray()) end
 	
 	if s == 1 then right_layout:add(separator) end
-	if s == 1 then right_layout:add(gmailwidget) end
+	--if s == 1 then right_layout:add(gmailwidget) end
 	if s == 1 then right_layout:add(separator) end
 	if s == 1 then right_layout:add(batwidget) end
 	if s == 1 then right_layout:add(batterywidget) end

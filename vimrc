@@ -193,6 +193,9 @@ onoremap <C-k> <Esc>
 cnoreabbrev <expr> W ((getcmdtype() is# ':' && getcmdline() is# 'W') ? ('w') : ('W'))
 nnoremap <C-d> :q<CR>
 
+" Allow saving of files as sudo when I forgot to start vim using sudo.
+cmap w!! w !sudo tee > /dev/null %
+
 "copy'n'paste and mouse stuff
 set mouse=a
 set pastetoggle=<F2>
