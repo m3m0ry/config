@@ -229,3 +229,9 @@ function! VisualSelection(direction) range
     let @/ = l:pattern
     let @" = l:saved_reg
 endfunction
+
+
+let git_settings = system("git config --get vim.settings")
+if strlen(git_settings)
+   exe "set" git_settings
+endif
