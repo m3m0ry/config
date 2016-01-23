@@ -87,7 +87,7 @@ filetype plugin indent on
 colorscheme torte
 "colorscheme oh-la-la
 set background=dark
-set cursorcolumn
+"set cursorcolumn
 set cursorline
 syntax on
 
@@ -127,6 +127,8 @@ set number
 set showcmd
 set scrolloff=5
 set wrap
+
+let &cocu="nc"
 " Linebreak on 500 characters
 "set lbr
 "set tw=80
@@ -139,6 +141,7 @@ set softtabstop=3
 set expandtab
 
 " Plugin Yggdroot/indentLine
+let g:indentLine_concealcursor = &cocu
 " Vim
 let g:indentLine_color_term = 31
 " GVim
@@ -194,6 +197,7 @@ cnoreabbrev <expr> W ((getcmdtype() is# ':' && getcmdline() is# 'W') ? ('w') : (
 nnoremap <C-d> :q<CR>
 
 " Allow saving of files as sudo when I forgot to start vim using sudo.
+" could work better
 cmap w!! w !sudo tee > /dev/null %
 
 "copy'n'paste and mouse stuff
