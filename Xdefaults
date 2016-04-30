@@ -1,4 +1,4 @@
-URxvt.saveLines: 1000
+URxvt.saveLines: 5000
 URxvt.scrollBar: false
 URxvt.foreground: white
 URxvt.background: black
@@ -17,6 +17,7 @@ URxvt.tabbed.secondaryScroll: true
 URxvt.tabbed.font: xft:Bitstream Vera Sans Mono:pixelsize=12
 URxvt*inheritPixmap: true
 URxvt*shading: 30
+URxvt.urgentOnBell: True
 
 URxvt.perl-ext-common: ...,clipboard,keyboard-select
 URxvt.keysym.M-c:   perl:clipboard:copy
