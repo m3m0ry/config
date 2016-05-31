@@ -5,3 +5,7 @@
 	default = simple
 [status]
 	short = true
+[merge]
+	tool = vimdiff
+[core]
+	editor = vim
