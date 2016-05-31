@@ -22,6 +22,9 @@ Plugin 'rdnetto/YCM-Generator'
 " UltiSnips - The ultimate snippet solution for Vim.
 Plugin 'SirVer/ultisnips'
 
+" vim-opencl
+Plugin 'petRUShka/vim-opencl'
+
 call vundle#end()
 filetype plugin indent on
 " Brief help
