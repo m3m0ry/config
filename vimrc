@@ -25,6 +25,19 @@ Plugin 'SirVer/ultisnips'
 " vim-opencl
 Plugin 'petRUShka/vim-opencl'
 
+" colorsheme zenburn
+Plugin 'jnurmine/Zenburn'
+
+" Nerdtree
+Plugin 'scrooloose/nerdtree'
+
+" Git-stuff in nerdtree
+Plugin 'Xuyuanp/nerdtree-git-plugin'
+
+" Git-Intergration
+Plugin 'tpope/vim-fugitive'
+
+
 call vundle#end()
 filetype plugin indent on
 " Brief help
@@ -36,6 +49,10 @@ filetype plugin indent on
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
+
+"Nerd tree auto if vim only
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " restore cursor position to where it was before
 augroup JumpCursorOnEdit
@@ -83,12 +100,14 @@ endif
 set autoread
 set noautochdir
 set lazyredraw
+set encoding=utf-8
 
 
 "syntax highlighting'n stuff
 filetype plugin indent on
-colorscheme torte
-"colorscheme oh-la-la
+"colorscheme torte
+colorscheme zenburn
+
 set background=dark
 "set cursorcolumn
 set cursorline
@@ -123,6 +142,20 @@ let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
+
+
+" Nerd-Tree settings
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ "Unknown"   : "?"
+    \ }
 
 "visual goodies
 set ruler
@@ -184,7 +217,6 @@ nnoremap <silent> <C-l> :tabnext<CR>
 nnoremap <silent> <BS> :pop<CR>
 
 "other key mappings
-inoremap jj <Esc>
 inoremap jk <Esc>
 " exit insert all modes with <C-k>
 inoremap <C-k> <Esc>
