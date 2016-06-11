@@ -37,6 +37,9 @@ Plugin 'Xuyuanp/nerdtree-git-plugin'
 " Git-Intergration
 Plugin 'tpope/vim-fugitive'
 
+" Latex
+Plugin 'lervag/vimtex'
+
 
 call vundle#end()
 filetype plugin indent on
@@ -135,13 +138,32 @@ let g:ycm_key_list_previous_completion=[]
 " close preview windows if leaving insert mode
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
-" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+" Trigger configuration.
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
+
+
+" vimtex Plugin
+let g:vimtex_enabled=1
+let g:vimtex_view_general_viewer = 'okular'
+if !exists('g:ycm_semantic_triggers')
+      let g:ycm_semantic_triggers = {}
+        endif
+          let g:ycm_semantic_triggers.tex = [
+                  \ 're!\\[A-Za-z]*cite[A-Za-z]*(\[[^]]*\]){0,2}{[^}]*',
+                  \ 're!\\[A-Za-z]*ref({[^}]*|range{([^,{}]*(}{)?))',
+                  \ 're!\\hyperref\[[^]]*',
+                  \ 're!\\includegraphics\*?(\[[^]]*\]){0,2}{[^}]*',
+                  \ 're!\\(include(only)?|input){[^}]*',
+                  \ 're!\\\a*(gls|Gls|GLS)(pl)?\a*(\s*\[[^]]*\]){0,2}\s*\{[^}]*',
+                  \ 're!\\includepdf(\s*\[[^]]*\])?\s*\{[^}]*',
+                  \ 're!\\includestandalone(\s*\[[^]]*\])?\s*\{[^}]*',
+                  \ ]
+
 
 
 " Nerd-Tree settings
