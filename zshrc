@@ -257,7 +257,6 @@ setopt NO_BEEP
 #setopt VI
 bindkey -v
 # Use jj and jk to exit insert mode.
-bindkey 'jj' vi-cmd-mode
 bindkey 'jk' vi-cmd-mode
 
 bindkey '^P' vi-up-line-or-history 

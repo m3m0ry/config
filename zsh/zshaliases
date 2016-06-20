@@ -21,7 +21,7 @@ alias -g ......='../../../../..'
 alias -g .......='../../../../../..'
 
 # Suffix
-alias -s pdf="evince"
+alias -s pdf="okular"
 alias -s c="vim"
 alias -s log="less"
 
