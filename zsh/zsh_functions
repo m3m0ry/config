@@ -44,11 +44,21 @@ alias extract=extract_archive
 compdef '_files -g "*.gz *.tgz *.bz2 *.tbz *.zip *.rar *.tar *.lha"' extract_archive
 
 
-
-
 function zsh_stats() {
 fc -l 1 | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" | column -c3 -s " " -t | sort -nr | nl | head -n20
 }
 
-
-
+function unexport() {
+	echo "Deleting $1 from $PATH"
+	for element in ${(@s/:/)PATH} #Splits PATH into an array
+	do
+		if [[ $element == $1 ]] then
+			echo "Found $element"
+		else
+			NEWPATH=$element":"$NEWPATH
+		fi
+	done
+	NEWPATH=${NEWPATH:1:-1} #Cut away last ":"
+	echo "New Path: $NEWPATH"
+	export PATH=$NEWPATH
+}

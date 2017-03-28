@@ -10,9 +10,6 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-" A vim plugin to display the indention levels with thin vertical lines
-Plugin 'Yggdroot/indentLine'
-
 " A code-completion engine for Vim http://valloric.github.io/YouCompleteMe/
 Plugin 'Valloric/YouCompleteMe'
 
@@ -23,22 +20,22 @@ Plugin 'rdnetto/YCM-Generator'
 Plugin 'SirVer/ultisnips'
 
 " vim-opencl
-Plugin 'petRUShka/vim-opencl'
+" Plugin 'petRUShka/vim-opencl'
 
 " colorsheme zenburn
 Plugin 'jnurmine/Zenburn'
 
 " Nerdtree
-Plugin 'scrooloose/nerdtree'
+" Plugin 'scrooloose/nerdtree'
 
 " Git-stuff in nerdtree
-Plugin 'Xuyuanp/nerdtree-git-plugin'
+" Plugin 'Xuyuanp/nerdtree-git-plugin'
 
 " Git-Intergration
-Plugin 'tpope/vim-fugitive'
+" Plugin 'tpope/vim-fugitive'
 
 " Latex
-Plugin 'lervag/vimtex'
+" Plugin 'lervag/vimtex'
 
 
 call vundle#end()
@@ -148,36 +145,36 @@ let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
 
 
 " vimtex Plugin
-let g:vimtex_enabled=1
-let g:vimtex_view_general_viewer = 'okular'
-if !exists('g:ycm_semantic_triggers')
-      let g:ycm_semantic_triggers = {}
-        endif
-          let g:ycm_semantic_triggers.tex = [
-                  \ 're!\\[A-Za-z]*cite[A-Za-z]*(\[[^]]*\]){0,2}{[^}]*',
-                  \ 're!\\[A-Za-z]*ref({[^}]*|range{([^,{}]*(}{)?))',
-                  \ 're!\\hyperref\[[^]]*',
-                  \ 're!\\includegraphics\*?(\[[^]]*\]){0,2}{[^}]*',
-                  \ 're!\\(include(only)?|input){[^}]*',
-                  \ 're!\\\a*(gls|Gls|GLS)(pl)?\a*(\s*\[[^]]*\]){0,2}\s*\{[^}]*',
-                  \ 're!\\includepdf(\s*\[[^]]*\])?\s*\{[^}]*',
-                  \ 're!\\includestandalone(\s*\[[^]]*\])?\s*\{[^}]*',
-                  \ ]
+"let g:vimtex_enabled=1
+"let g:vimtex_view_general_viewer = 'okular'
+"if !exists('g:ycm_semantic_triggers')
+"      let g:ycm_semantic_triggers = {}
+"        endif
+"          let g:ycm_semantic_triggers.tex = [
+"                  \ 're!\\[A-Za-z]*cite[A-Za-z]*(\[[^]]*\]){0,2}{[^}]*',
+"                  \ 're!\\[A-Za-z]*ref({[^}]*|range{([^,{}]*(}{)?))',
+"                  \ 're!\\hyperref\[[^]]*',
+"                  \ 're!\\includegraphics\*?(\[[^]]*\]){0,2}{[^}]*',
+"                  \ 're!\\(include(only)?|input){[^}]*',
+"                  \ 're!\\\a*(gls|Gls|GLS)(pl)?\a*(\s*\[[^]]*\]){0,2}\s*\{[^}]*',
+"                  \ 're!\\includepdf(\s*\[[^]]*\])?\s*\{[^}]*',
+"                  \ 're!\\includestandalone(\s*\[[^]]*\])?\s*\{[^}]*',
+"                  \ ]
 
 
 
 " Nerd-Tree settings
-let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "✹",
-    \ "Staged"    : "✚",
-    \ "Untracked" : "✭",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "═",
-    \ "Deleted"   : "✖",
-    \ "Dirty"     : "✗",
-    \ "Clean"     : "✔︎",
-    \ "Unknown"   : "?"
-    \ }
+" let g:NERDTreeIndicatorMapCustom = {
+"     \ "Modified"  : "✹",
+"     \ "Staged"    : "✚",
+"     \ "Untracked" : "✭",
+"     \ "Renamed"   : "➜",
+"     \ "Unmerged"  : "═",
+"     \ "Deleted"   : "✖",
+"     \ "Dirty"     : "✗",
+"     \ "Clean"     : "✔︎",
+"     \ "Unknown"   : "?"
+"     \ }
 
 "visual goodies
 set ruler
@@ -186,7 +183,6 @@ set showcmd
 set scrolloff=5
 set wrap
 
-let &cocu="nc"
 " Linebreak on 500 characters
 "set lbr
 "set tw=80
@@ -196,22 +192,7 @@ set autoindent
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
-set expandtab
-
-" Plugin Yggdroot/indentLine
-let g:indentLine_concealcursor = &cocu
-" Vim
-let g:indentLine_color_term = 31
-" GVim
-let g:indentLine_color_gui = '#A4E57E'
-" none X terminal
-let g:indentLine_color_tty_light = 7 " (default: 4)
-let g:indentLine_color_dark = 1 " (default: 2)
-" Other settings
-let g:indentLine_char = '┊'
-let g:indentLine_enabled = 1
-let g:indentLine_leadingSpaceEnabled = 1
-
+set noexpandtab
 
 " Treat long lines as break lines (useful when moving around in them)
 map j gj
