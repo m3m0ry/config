@@ -25,17 +25,24 @@ Plugin 'SirVer/ultisnips'
 " colorsheme zenburn
 Plugin 'jnurmine/Zenburn'
 
+" vim-julia
+Plugin 'JuliaLang/julia-vim'
+
 " Nerdtree
-" Plugin 'scrooloose/nerdtree'
+"Plugin 'scrooloose/nerdtree'
 
 " Git-stuff in nerdtree
-" Plugin 'Xuyuanp/nerdtree-git-plugin'
+"Plugin 'Xuyuanp/nerdtree-git-plugin'
 
-" Git-Intergration
-" Plugin 'tpope/vim-fugitive'
+" Powerline
+" Plugin 'powerline/powerline'
+
+" Syntastic
+"Plugin 'scrooloose/syntastic'
+
 
 " Latex
-" Plugin 'lervag/vimtex'
+"Plugin 'lervag/vimtex'
 
 
 call vundle#end()
@@ -51,8 +58,8 @@ filetype plugin indent on
 
 
 "Nerd tree auto if vim only
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+"autocmd StdinReadPre * let s:std_in=1
+"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " restore cursor position to where it was before
 augroup JumpCursorOnEdit
@@ -82,7 +89,6 @@ augroup END
 
 autocmd Filetype gitcommit setlocal spell textwidth=72
 
-
 "no backup files but a large history and undofiles
 set history=500
 set nobackup
@@ -101,6 +107,12 @@ set autoread
 set noautochdir
 set lazyredraw
 set encoding=utf-8
+set splitbelow
+set splitright
+
+" Enable folding
+set foldmethod=indent
+set foldlevel=99
 
 
 "syntax highlighting'n stuff
@@ -110,7 +122,7 @@ colorscheme zenburn
 
 set background=dark
 "set cursorcolumn
-set cursorline
+"set cursorline
 syntax on
 
 "statusline
@@ -143,6 +155,10 @@ let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 let g:UltiSnipsEditSplit="vertical"
 let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
 
+" Plugin vim-julia
+let g:latex_to_unicode_auto=1
+let g:latex_to_unicode_tab=0
+
 
 " vimtex Plugin
 "let g:vimtex_enabled=1
@@ -164,17 +180,17 @@ let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
 
 
 " Nerd-Tree settings
-" let g:NERDTreeIndicatorMapCustom = {
-"     \ "Modified"  : "✹",
-"     \ "Staged"    : "✚",
-"     \ "Untracked" : "✭",
-"     \ "Renamed"   : "➜",
-"     \ "Unmerged"  : "═",
-"     \ "Deleted"   : "✖",
-"     \ "Dirty"     : "✗",
-"     \ "Clean"     : "✔︎",
-"     \ "Unknown"   : "?"
-"     \ }
+"let g:NERDTreeIndicatorMapCustom = {
+"    \ "Modified"  : "✹",
+"    \ "Staged"    : "✚",
+"    \ "Untracked" : "✭",
+"    \ "Renamed"   : "➜",
+"    \ "Unmerged"  : "═",
+"    \ "Deleted"   : "✖",
+"    \ "Dirty"     : "✗",
+"    \ "Clean"     : "✔︎",
+"    \ "Unknown"   : "?"
+"    \ }
 
 "visual goodies
 set ruler
@@ -193,6 +209,7 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set noexpandtab
+set expandtab
 
 " Treat long lines as break lines (useful when moving around in them)
 map j gj
@@ -206,6 +223,15 @@ vnoremap <silent> # :call VisualSelection('b')<CR>
 
 "make <C-q> and <C-s> reach vim
 silent !stty -ixon > /dev/null 2>/dev/null
+
+" Enable folding with the spacebar
+nnoremap <space> za
+
+"split navigations
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
 
 "tabs
 nnoremap <C-t> :tabe 
@@ -271,6 +297,19 @@ function! VisualSelection(direction) range
     let @/ = l:pattern
     let @" = l:saved_reg
 endfunction
+
+
+
+" Python PEP8
+"au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+"au BufNewFile,BufRead *.py
+"    \ set tabstop=4
+"    \ set softtabstop=4
+"    \ set shiftwidth=4
+"    \ set textwidth=79
+"    \ set expandtab
+"    \ set autoindent
+"    \ set fileformat=unix
 
 
 let git_settings = system("git config --get vim.settings")
