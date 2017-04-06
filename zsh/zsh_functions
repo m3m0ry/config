@@ -28,7 +28,7 @@ function extract_archive () {
     elif [[ $lower == *.bz2 ]]; then
         bunzip2 $1
     elif [[ $lower == *.zip ]]; then
-        unzip $1
+        unzip $1 -d ${1:r}
     elif [[ $lower == *.rar ]]; then
         unrar e $1
     elif [[ $lower == *.tar ]]; then
