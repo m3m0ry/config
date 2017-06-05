@@ -25,24 +25,17 @@ Plugin 'SirVer/ultisnips'
 " colorsheme zenburn
 Plugin 'jnurmine/Zenburn'
 
+" SLIMEV
+Plugin 'kovisoft/slimv'
+
 " vim-julia
-Plugin 'JuliaLang/julia-vim'
-
-" Nerdtree
-"Plugin 'scrooloose/nerdtree'
-
-" Git-stuff in nerdtree
-"Plugin 'Xuyuanp/nerdtree-git-plugin'
+"Plugin 'JuliaLang/julia-vim'
 
 " Powerline
 " Plugin 'powerline/powerline'
 
 " Syntastic
 "Plugin 'scrooloose/syntastic'
-
-
-" Latex
-"Plugin 'lervag/vimtex'
 
 
 call vundle#end()
@@ -87,7 +80,6 @@ augroup JumpCursorOnEdit
             \ endif
 augroup END
 
-autocmd Filetype gitcommit setlocal spell textwidth=72
 
 "no backup files but a large history and undofiles
 set history=500
@@ -155,43 +147,6 @@ let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 let g:UltiSnipsEditSplit="vertical"
 let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
 
-" Plugin vim-julia
-let g:latex_to_unicode_auto=1
-let g:latex_to_unicode_tab=0
-
-
-" vimtex Plugin
-"let g:vimtex_enabled=1
-"let g:vimtex_view_general_viewer = 'okular'
-"if !exists('g:ycm_semantic_triggers')
-"      let g:ycm_semantic_triggers = {}
-"        endif
-"          let g:ycm_semantic_triggers.tex = [
-"                  \ 're!\\[A-Za-z]*cite[A-Za-z]*(\[[^]]*\]){0,2}{[^}]*',
-"                  \ 're!\\[A-Za-z]*ref({[^}]*|range{([^,{}]*(}{)?))',
-"                  \ 're!\\hyperref\[[^]]*',
-"                  \ 're!\\includegraphics\*?(\[[^]]*\]){0,2}{[^}]*',
-"                  \ 're!\\(include(only)?|input){[^}]*',
-"                  \ 're!\\\a*(gls|Gls|GLS)(pl)?\a*(\s*\[[^]]*\]){0,2}\s*\{[^}]*',
-"                  \ 're!\\includepdf(\s*\[[^]]*\])?\s*\{[^}]*',
-"                  \ 're!\\includestandalone(\s*\[[^]]*\])?\s*\{[^}]*',
-"                  \ ]
-
-
-
-" Nerd-Tree settings
-"let g:NERDTreeIndicatorMapCustom = {
-"    \ "Modified"  : "✹",
-"    \ "Staged"    : "✚",
-"    \ "Untracked" : "✭",
-"    \ "Renamed"   : "➜",
-"    \ "Unmerged"  : "═",
-"    \ "Deleted"   : "✖",
-"    \ "Dirty"     : "✗",
-"    \ "Clean"     : "✔︎",
-"    \ "Unknown"   : "?"
-"    \ }
-
 "visual goodies
 set ruler
 set number
@@ -199,7 +154,7 @@ set showcmd
 set scrolloff=5
 set wrap
 
-" Linebreak on 500 characters
+" Linebreak on 80 characters
 "set lbr
 "set tw=80
 
@@ -220,10 +175,6 @@ map k gk
 vnoremap <silent> * :call VisualSelection('f')<CR>
 vnoremap <silent> # :call VisualSelection('b')<CR>
 
-
-"make <C-q> and <C-s> reach vim
-silent !stty -ixon > /dev/null 2>/dev/null
-
 " Enable folding with the spacebar
 nnoremap <space> za
 
@@ -233,32 +184,25 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
-"tabs
-nnoremap <C-t> :tabe 
-nnoremap <silent> <C-w> :q<CR>
-nnoremap <silent> <C-q> :qa<CR>
-nnoremap <silent> <C-Left> :tabprevious<CR>
-nnoremap <silent> <C-Right> :tabnext<CR>
-nnoremap <silent> <C-h> :tabprevious<CR>
-nnoremap <silent> <C-l> :tabnext<CR>
+"buffer hanlding
+nnoremap <C-T> :e 
+nnoremap <Tab> :bnext<CR>
+nnoremap <S-Tab> :bprev<CR>
+nnoremap <C-S> :b 
 
 " what is this?
 nnoremap <silent> <BS> :pop<CR>
 
 "other key mappings
 inoremap jk <Esc>
-" exit insert all modes with <C-k>
-inoremap <C-k> <Esc>
-cnoremap <C-k> <Esc>
-nnoremap <C-k> <Esc>
-vnoremap <C-k> <Esc>
-xnoremap <C-k> <Esc>
-snoremap <C-k> <Esc>
-onoremap <C-k> <Esc>
+
+"copy to clipboard
+vmap "+y :!xclip -f -sel clip<CR>
+map "+p :r!xclip -o -sel clip<CR>
+
 
 "aliases
 cnoreabbrev <expr> W ((getcmdtype() is# ':' && getcmdline() is# 'W') ? ('w') : ('W'))
-nnoremap <C-d> :q<CR>
 
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 " could work better
@@ -300,17 +244,12 @@ endfunction
 
 
 
-" Python PEP8
-"au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-"au BufNewFile,BufRead *.py
-"    \ set tabstop=4
-"    \ set softtabstop=4
-"    \ set shiftwidth=4
-"    \ set textwidth=79
-"    \ set expandtab
-"    \ set autoindent
-"    \ set fileformat=unix
+" Language Specific Options:
 
+" Python PEP8
+au Filetype python setl tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 expandtab fileformat=unix
+
+autocmd Filetype gitcommit setlocal spell textwidth=72
 
 let git_settings = system("git config --get vim.settings")
 if strlen(git_settings)
