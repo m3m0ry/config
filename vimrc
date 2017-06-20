@@ -99,8 +99,9 @@ set autoread
 set noautochdir
 set lazyredraw
 set encoding=utf-8
-set splitbelow
+set visualbell
 set splitright
+set splitbelow
 
 " Enable folding
 set foldmethod=indent
@@ -147,6 +148,10 @@ let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 let g:UltiSnipsEditSplit="vertical"
 let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
 
+
+" Plugin Slimv
+let g:lisp_rainbow=1
+
 "visual goodies
 set ruler
 set number
@@ -164,7 +169,6 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set noexpandtab
-set expandtab
 
 " Treat long lines as break lines (useful when moving around in them)
 map j gj
