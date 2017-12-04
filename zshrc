@@ -382,6 +382,16 @@ chpwd () {
                 umask 0077
                 echo -e "\033[01;32mumask: private \033[m"
             fi;;
+		*$USERNAME)
+            if [ $(umask) -ne 077 ] && [ $UID -ne 0 ]; then
+                umask 0077
+                echo -e "\033[01;32mumask: private \033[m"
+            fi;;
+		*$USERNAME/*)
+            if [ $(umask) -ne 077 ] && [ $UID -ne 0 ]; then
+                umask 0077
+                echo -e "\033[01;32mumask: private \033[m"
+            fi;;
         *)
             if [[ $(umask) -ne 022 ]]; then
                 umask 0022
