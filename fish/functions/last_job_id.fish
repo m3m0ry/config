@@ -1,0 +1,1 @@
+/home/rzlin/im50ibaq/.config/fisherman/last_job_id/last_job_id.fish

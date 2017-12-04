@@ -1,0 +1,1 @@
+/home/rzlin/im50ibaq/.config/fisherman/pwd_is_home/pwd_is_home.fish

@@ -1,0 +1,1 @@
+/home/rzlin/im50ibaq/.config/fisherman/humanize_duration/humanize_duration.fish

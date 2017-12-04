@@ -1,0 +1,1 @@
+/home/rzlin/im50ibaq/.config/fisherman/docker-compose/completions/docker-compose.fish
