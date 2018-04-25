@@ -6,7 +6,7 @@
 [status]
 	short = true
 [merge]
-	tool = vimdiff
+	tool = kdiff3
 [core]
 	editor = vim
 [alias]

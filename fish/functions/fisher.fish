@@ -686,11 +686,11 @@ end
 function __fisher_self_update
     set -l file (status --current-filename)
 
-    if test "$file" != "$fish_config/functions/$fisher_cmd_name.fish"
+    if test "$file" != "$fish_path/functions/$fisher_cmd_name.fish"
         return 1
     end
 
-    set -l completions "$fish_config/completions/$fisher_cmd_name.fish"
+    set -l completions "$fish_path/completions/$fisher_cmd_name.fish"
     set -l raw_url "https://raw.githubusercontent.com/fisherman/fisherman/master/fisher.fish"
     set -l fake_qs (date "+%s")
 
@@ -1166,16 +1166,16 @@ function __fisher_remote_index_update
         }
 
         {
-            if ($0 ~ /^name: /) {
-                name = substr($0, 7)
+            if (match($0, /^name:[[:blank:]]*/)) {
+                name = substr($0, RLENGTH+1)
             }
 
-            if ($0 ~ /^description: /) {
-                info = substr($0, 14)
+            if (match($0, /^description:[[:blank:]]*/)) {
+                info = substr($0, RLENGTH+1)
             }
 
-            if ($0 ~ /^stargazers_count: /) {
-                stars = substr($0, 19)
+            if (match($0, /^stargazers_count:[[:blank:]]*/)) {
+                stars = substr($0, RLENGTH+1)
             }
 
             if (name != "" && stars != "") {
