@@ -1,1 +1,1 @@
-/home/rzlin/im50ibaq/.config/fisherman/done/conf.d/done.fish
+/home/hrom/.config/fisherman/done/conf.d/done.fish

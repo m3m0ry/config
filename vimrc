@@ -29,7 +29,7 @@ Plugin 'jnurmine/Zenburn'
 Plugin 'kovisoft/slimv'
 
 " vim-julia
-"Plugin 'JuliaLang/julia-vim'
+Plugin 'JuliaLang/julia-vim'
 
 " Powerline
 " Plugin 'powerline/powerline'
@@ -151,6 +151,7 @@ let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
 
 " Plugin Slimv
 let g:lisp_rainbow=1
+let g:slimv_swank_cmd = '! konsole -e sbcl --load ~/.vim/bundle/slimv/slime/start-swank.lisp &'
 
 "visual goodies
 set ruler
@@ -165,10 +166,10 @@ set wrap
 
 "Indentation
 set autoindent
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-set noexpandtab
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set expandtab
 
 " Treat long lines as break lines (useful when moving around in them)
 map j gj
