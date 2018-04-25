@@ -17,7 +17,7 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'rdnetto/YCM-Generator'
 
 " UltiSnips - The ultimate snippet solution for Vim.
-Plugin 'SirVer/ultisnips'
+" Plugin 'SirVer/ultisnips'
 
 " vim-opencl
 " Plugin 'petRUShka/vim-opencl'
@@ -140,18 +140,19 @@ let g:ycm_key_list_previous_completion=[]
 " close preview windows if leaving insert mode
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
-" Trigger configuration.
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
-let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
+"" Trigger configuration.
+"let g:UltiSnipsExpandTrigger="<tab>"
+"let g:UltiSnipsJumpForwardTrigger="<c-j>"
+"let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+"" If you want :UltiSnipsEdit to split your window.
+"let g:UltiSnipsEditSplit="vertical"
+"let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
 
 
 " Plugin Slimv
 let g:lisp_rainbow=1
 let g:slimv_swank_cmd = '! konsole -e sbcl --load ~/.vim/bundle/slimv/slime/start-swank.lisp &'
+
 
 "visual goodies
 set ruler
@@ -254,7 +255,7 @@ endfunction
 " Python PEP8
 au Filetype python setl tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 expandtab fileformat=unix
 
-autocmd Filetype gitcommit setlocal spell textwidth=72
+autocmd Filetype gitcommit setlocal spell textwidth=80
 
 let git_settings = system("git config --get vim.settings")
 if strlen(git_settings)
