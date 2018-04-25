@@ -1,1 +1,1 @@
-/home/rzlin/im50ibaq/.config/fisherman/git_util/git_is_tag.fish
+/home/hrom/.config/fisherman/git_util/git_is_tag.fish

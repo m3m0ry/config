@@ -1,1 +1,1 @@
-/home/rzlin/im50ibaq/.config/fisherman/host_info/host_info.fish
+/home/hrom/.config/fisherman/host_info/host_info.fish

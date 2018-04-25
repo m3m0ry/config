@@ -1,1 +1,1 @@
-/home/rzlin/im50ibaq/.config/fisherman/bass/functions/bass.fish
+/home/hrom/.config/fisherman/bass/functions/bass.fish
