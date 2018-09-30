@@ -32,6 +32,8 @@ alias lx='ll -BX'                   # sort by extension
 alias lz='ll -rS'                   # sort by size
 alias lt='ll -rt'                   # sort by date
 
+alias el='exa -l'
+
 # saving my ass
 # this is so fucking helpfull!!!
 alias cp='cp -i -a'
@@ -42,9 +44,12 @@ alias chmod='chmod --preserve-root'
 alias chgrp='chgrp --preserve-root'
 alias wget='wget -c'
 
+alias julia='~/git/julia/julia'
+
 
 
 abbr -a g git
 abbr -a v vim
 abbr -a c clear
 abbr -a l ls
+abbr -a e exa
