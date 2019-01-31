@@ -44,9 +44,6 @@ alias chmod='chmod --preserve-root'
 alias chgrp='chgrp --preserve-root'
 alias wget='wget -c'
 
-alias julia='~/git/julia/julia'
-
-
 
 abbr -a g git
 abbr -a v vim
