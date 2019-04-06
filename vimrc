@@ -11,10 +11,10 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 " A code-completion engine for Vim http://valloric.github.io/YouCompleteMe/
-Plugin 'Valloric/YouCompleteMe'
+" Plugin 'Valloric/YouCompleteMe'
 
 " Generates config files for YouCompleteMe
-Plugin 'rdnetto/YCM-Generator'
+" Plugin 'rdnetto/YCM-Generator'
 
 " UltiSnips - The ultimate snippet solution for Vim.
 " Plugin 'SirVer/ultisnips'
@@ -26,10 +26,10 @@ Plugin 'rdnetto/YCM-Generator'
 Plugin 'jnurmine/Zenburn'
 
 " SLIMEV
-Plugin 'kovisoft/slimv'
+" Plugin 'kovisoft/slimv'
 
 " vim-julia
-Plugin 'JuliaLang/julia-vim'
+" Plugin 'JuliaLang/julia-vim'
 
 " Powerline
 " Plugin 'powerline/powerline'
