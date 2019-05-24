@@ -1,14 +1,14 @@
 set nocompatible              " be iMproved, required
-filetype off                  " required for vundle
+"filetype off                  " required for vundle
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+"set rtp+=~/.vim/bundle/Vundle.vim
+"call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 " call vundle#begin('some/path')
 
 " let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+" Plugin 'VundleVim/Vundle.vim'
 
 " A code-completion engine for Vim http://valloric.github.io/YouCompleteMe/
 " Plugin 'Valloric/YouCompleteMe'
@@ -23,7 +23,7 @@ Plugin 'VundleVim/Vundle.vim'
 " Plugin 'petRUShka/vim-opencl'
 
 " colorsheme zenburn
-Plugin 'jnurmine/Zenburn'
+" Plugin 'jnurmine/Zenburn'
 
 " SLIMEV
 " Plugin 'kovisoft/slimv'
@@ -38,7 +38,7 @@ Plugin 'jnurmine/Zenburn'
 "Plugin 'scrooloose/syntastic'
 
 
-call vundle#end()
+"call vundle#end()
 filetype plugin indent on
 " Brief help
 " :PluginList       - lists configured plugins
@@ -110,8 +110,8 @@ set foldlevel=99
 
 "syntax highlighting'n stuff
 filetype plugin indent on
-"colorscheme torte
-colorscheme zenburn
+colorscheme desert
+"colorscheme zenburn
 
 set background=dark
 "set cursorcolumn
@@ -135,10 +135,10 @@ nnoremap i :let @/ = ""<CR>i
 
 " Plugin YouCompleteMe
 " Don't complete with TAB, use C-N and C-P instead
-let g:ycm_key_list_select_completion=[]
-let g:ycm_key_list_previous_completion=[]
+"let g:ycm_key_list_select_completion=[]
+"let g:ycm_key_list_previous_completion=[]
 " close preview windows if leaving insert mode
-let g:ycm_autoclose_preview_window_after_insertion = 1
+"let g:ycm_autoclose_preview_window_after_insertion = 1
 
 "" Trigger configuration.
 "let g:UltiSnipsExpandTrigger="<tab>"
@@ -150,8 +150,8 @@ let g:ycm_autoclose_preview_window_after_insertion = 1
 
 
 " Plugin Slimv
-let g:lisp_rainbow=1
-let g:slimv_swank_cmd = '! konsole -e sbcl --load ~/.vim/bundle/slimv/slime/start-swank.lisp &'
+"let g:lisp_rainbow=1
+"let g:slimv_swank_cmd = '! konsole -e sbcl --load ~/.vim/bundle/slimv/slime/start-swank.lisp &'
 
 
 "visual goodies
@@ -257,7 +257,7 @@ au Filetype python setl tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 expand
 
 autocmd Filetype gitcommit setlocal spell textwidth=80
 
-let git_settings = system("git config --get vim.settings")
-if strlen(git_settings)
-   exe "set" git_settings
-endif
+"let git_settings = system("git config --get vim.settings")
+"if strlen(git_settings)
+"   exe "set" git_settings
+"endif
