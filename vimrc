@@ -27,12 +27,12 @@ augroup JumpCursorOnEdit
 augroup END
 
 " No backup files but a large history and undofiles
-set backupdir=.backup/,~/.vim/backup/,/tmp//
-set directory=.swp/,~/./vim/swp/,/tmp//
+set backupdir=~/.vim/backup/,.backup/,/tmp//
+set directory=~/./vim/swp/,.swp/,/tmp//
 set history=500
 set undolevels=1000
 set undofile
-set undodir=.undo/,~/.vim/undo/,/tmp//
+set undodir=~/.vim/undo/,.undo/,/tmp//
 set undoreload=10000
 
 "misc
@@ -100,7 +100,7 @@ vnoremap <silent> * :call VisualSelection('f')<CR>
 vnoremap <silent> # :call VisualSelection('b')<CR>
 
 " Enable folding with the spacebar
-nnoremap <space> za
+"nnoremap <space> za
 
 "split navigations
 nnoremap <C-J> <C-W><C-J>
@@ -112,10 +112,7 @@ nnoremap <C-H> <C-W><C-H>
 nnoremap <C-T> :e 
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprev<CR>
-nnoremap <C-S> :b 
-
-" what is this?
-nnoremap <silent> <BS> :pop<CR>
+" nnoremap <C-Tab> :b 
 
 "other key mappings
 inoremap jk <Esc>
