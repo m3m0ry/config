@@ -4,3 +4,4 @@ barnybug/docker-fish-completion
 fisherman/done
 fisherman/git_util
 kennethreitz/fish-pipenv
+fishpkg/fish-last-job-id
