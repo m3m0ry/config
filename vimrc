@@ -45,7 +45,7 @@ set splitbelow
 
 " Enable folding
 set foldmethod=indent
-set foldlevel=99
+set foldlevel=120
 
 " Syntax highlighting'n stuff
 filetype plugin indent on
