@@ -8,7 +8,7 @@
 [merge]
 	tool = kdiff3
 [core]
-	editor = vim
+	editor = nvim
 [alias]
 	co = checkout
 	br = branch
@@ -17,8 +17,10 @@
 	last = log -1 HEAD
 	unstage = reset HEAD --
 [diff]
-	tool = vimdiff
+	tool = nvim -d
 [difftool]
 	prompt = false
 [pull]
 	rebase = false
+[init]
+	defaultBranch = master

@@ -1,5 +1,4 @@
 # Make sure aliases are expanded when using sudo.
-alias please='sudo '
 alias sudo='sudo '
 
 
@@ -24,8 +23,7 @@ alias .5='cd ../../../../..'
 # modified commands
 alias c=clear
 alias g=git
-alias hc='herbstclient'
-alias v='vim'
+alias v='nvim'
 alias grep='grep --color=auto'
 alias nano='nano -w'
 alias ping='ping -c 5'
