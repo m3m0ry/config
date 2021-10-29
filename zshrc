@@ -8,13 +8,11 @@ my_exports="~/.zsh/exports"
 my_functions="~/.zsh/zsh_functions"
 
 
-# Source manjaro-zsh-configuration
-if [[ -e /usr/share/zsh/manjaro-zsh-config ]]; then
-  source /usr/share/zsh/manjaro-zsh-config
+if [[ -e ~/.zsh/config ]]; then
+  source ~/.zsh/config
 fi
-# Use manjaro zsh prompt
-if [[ -e /usr/share/zsh/manjaro-zsh-prompt ]]; then
-  source /usr/share/zsh/manjaro-zsh-prompt
+if [[ -e ~/.zsh/prompt ]]; then
+  source ~/.zsh/prompt
 fi
 
 
