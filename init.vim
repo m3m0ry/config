@@ -50,7 +50,6 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 inoremap jk <Esc>          " press jk to exit insert mode
-vnoremap jk <Esc>          " press jk to exit visual mode
 " Treat long lines as break lines (useful when moving around in them)
 map j gj
 map k gk
