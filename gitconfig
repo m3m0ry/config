@@ -1,12 +1,12 @@
 [user]
 	name = Jan Hönig
-	email = jan.hoenig@fau.de
+	email = hrominium@gmail.com
 [push]
 	default = simple
 [status]
 	short = true
 [merge]
-	tool = kdiff3
+	tool = nvim
 [core]
 	editor = nvim
 [alias]
